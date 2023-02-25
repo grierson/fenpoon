@@ -14,6 +14,10 @@ local a, core, nvim = require("fenpoon.aniseed.core"), require("fenpoon.core"), 
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["core"] = core
 _2amodule_locals_2a["nvim"] = nvim
+local function init()
+  return print("hello fenpoon")
+end
+_2amodule_2a["init"] = init
 local marks = {}
 local function get_path()
   return vim.api.nvim_buf_get_name(0)
@@ -35,16 +39,16 @@ local function swap(bufid)
   return vim.api.nvim_set_current_buf(bufid)
 end
 _2amodule_2a["swap"] = swap
-local function init()
-  return print("hello fenpoon")
-end
-_2amodule_2a["init"] = init
 local function log()
   return print(core.list(marks))
 end
 _2amodule_2a["log"] = log
 local function select(index)
-  return core.get(marks, index)
+  local _let_1_ = core.get(marks, index)
+  local name = _let_1_[1]
+  local cursor = _let_1_[2]
+  local bufid = path__3ebufid(name)
+  return swap(bufid)
 end
 _2amodule_2a["select"] = select
 return _2amodule_2a

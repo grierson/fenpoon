@@ -2,24 +2,23 @@
                                a aniseed.core
                                core fenpoon.core}})
 
-; (var marks [{:filename :/relative/path/main.fnl [(row) (col)]
-;             {:filename :/relative/path/other [(row) (col)]}])
-
+; State
 (var marks [])
+
+(defn init
+  []
+  "Init function"
+  (print "hello fenpoon"))
 
 (defn get-path
   []
   "Get file path relative to project"
   (vim.api.nvim_buf_get_name 0))
 
-(defn cursor-location
-  []
-  "(row, col) tuple"
-  (vim.api.nvim_win_get_cursor 0))
-
 (defn mark
   []
-  (core.add marks (get-path) (cursor-location)))
+  "Add file to marks"
+  (core.add marks (get-path)))
 
 (defn path->bufid
   [path]
@@ -31,24 +30,22 @@
   "Swap to buffer. bufid -> void (swaps to buffer)"
   (vim.api.nvim_set_current_buf bufid))
 
-(defn init
-  []
-  (print "hello fenpoon"))
-
 (defn log
   []
+  "Print marked files"
   (print (core.list marks)))
 
 (defn select
   [index]
-  (let [[name cursor] (core.get marks index)
+  "Use index to switch to buffer"
+  (let [name (core.get marks index)
         bufid (path->bufid name)]
     (swap bufid)))
 
 ; -- Log mark
 ; (mark)
 ; (log)
-; (select 1)
+; (select 2)
 ; :lua require"fenpoon.main".mark()
 ; :lua require"fenpoon.main".log()
 ; :lua R"fenpoon.main"
