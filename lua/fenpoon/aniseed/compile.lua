@@ -1,5 +1,5 @@
 local _2afile_2a = "fnl/aniseed/compile.fnl"
-local _2amodule_name_2a = "harpoon.aniseed.compile"
+local _2amodule_name_2a = "fenpoon.aniseed.compile"
 local _2amodule_2a
 do
   package.loaded[_2amodule_name_2a] = {}
@@ -10,14 +10,14 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local autoload = (require("harpoon.aniseed.autoload")).autoload
-local a, fennel, fs, nvim = autoload("harpoon.aniseed.core"), autoload("harpoon.aniseed.fennel"), autoload("harpoon.aniseed.fs"), autoload("harpoon.aniseed.nvim")
+local autoload = (require("fenpoon.aniseed.autoload")).autoload
+local a, fennel, fs, nvim = autoload("fenpoon.aniseed.core"), autoload("fenpoon.aniseed.fennel"), autoload("fenpoon.aniseed.fs"), autoload("fenpoon.aniseed.nvim")
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["fennel"] = fennel
 _2amodule_locals_2a["fs"] = fs
 _2amodule_locals_2a["nvim"] = nvim
 local function wrap_macros(code, opts)
-  local macros_module = "harpoon.aniseed.macros"
+  local macros_module = "fenpoon.aniseed.macros"
   local filename
   do
     local _1_ = a.get(opts, "filename")

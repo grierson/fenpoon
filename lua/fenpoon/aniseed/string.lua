@@ -1,5 +1,5 @@
 local _2afile_2a = "fnl/aniseed/string.fnl"
-local _2amodule_name_2a = "harpoon.aniseed.string"
+local _2amodule_name_2a = "fenpoon.aniseed.string"
 local _2amodule_2a
 do
   package.loaded[_2amodule_name_2a] = {}
@@ -10,8 +10,8 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local autoload = (require("harpoon.aniseed.autoload")).autoload
-local a = autoload("harpoon.aniseed.core")
+local autoload = (require("fenpoon.aniseed.autoload")).autoload
+local a = autoload("fenpoon.aniseed.core")
 do end (_2amodule_locals_2a)["a"] = a
 local function join(...)
   local args = {...}

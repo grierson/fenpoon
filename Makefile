@@ -9,7 +9,7 @@ compile:
 	rm -rf lua
 
 	# Remove this if you only want Aniseed at compile time.
-	deps/aniseed/scripts/embed.sh aniseed harpoon
+	deps/aniseed/scripts/embed.sh aniseed fenpoon
 
 	# Also remove this embed prefix if you're not using Aniseed inside your plugin at runtime.
 	ANISEED_EMBED_PREFIX=harpoon deps/aniseed/scripts/compile.sh

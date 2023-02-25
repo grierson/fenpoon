@@ -1,5 +1,5 @@
 local _2afile_2a = "fnl/aniseed/test.fnl"
-local _2amodule_name_2a = "harpoon.aniseed.test"
+local _2amodule_name_2a = "fenpoon.aniseed.test"
 local _2amodule_2a
 do
   package.loaded[_2amodule_name_2a] = {}
@@ -10,8 +10,8 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local autoload = (require("harpoon.aniseed.autoload")).autoload
-local a, fs, nvim, str = autoload("harpoon.aniseed.core"), autoload("harpoon.aniseed.fs"), autoload("harpoon.aniseed.nvim"), autoload("harpoon.aniseed.string")
+local autoload = (require("fenpoon.aniseed.autoload")).autoload
+local a, fs, nvim, str = autoload("fenpoon.aniseed.core"), autoload("fenpoon.aniseed.fs"), autoload("fenpoon.aniseed.nvim"), autoload("fenpoon.aniseed.string")
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["fs"] = fs
 _2amodule_locals_2a["nvim"] = nvim
