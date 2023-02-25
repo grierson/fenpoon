@@ -1,40 +1,41 @@
-(module fenpoon.main {require {nvim aniseed.nvim a aniseed.core}})
+(module fenpoon.main {require {nvim aniseed.nvim
+                               a aniseed.core
+                               core fenpoon.core}})
 
 ; (var marks [{:filename :/relative/path/main.fnl [(row) (col)]
 ;             {:filename :/relative/path/other [(row) (col)]}])
 
 (var marks [])
 
-(defn debug [] (vim.inspect marks))
-(defn reset [] (set marks nil))
-(defn project-root [] (vim.loop.cwd))
-
-(defn file-path []
-  (string.gsub (vim.api.nvim_buf_get_name 0) (vim.loop.cwd) ""))
-
-(defn cursor-location [] (vim.api.nvim_win_get_cursor 0))
-
-(defn- contains
-  [coll value]
-  "Is file path in marks?"
-  (a.some (fn [[name _]]
-            (if (= name value)
-                name)) coll))
-
-(defn add
-  [state path cursor]
-  "Add new file paths to marks"
-  (when (a.nil? (contains state path))
-    (table.insert state [path cursor])))
-
-(defn list
+(defn get-path
   []
-  (icollect [i [file _] (ipairs marks)]
-    [i file]))
+  "Get file path relative to project"
+  (vim.api.nvim_buf_get_name 0))
 
-; (reset)
-; (mark_file [] (file-path) (cursor-location))
-; (list_marks)
-;
-; (def foo
-;   [{:file/a [10 20]} {:file/b [30 40]}])
+(defn cursor-location
+  []
+  "(row, col) tuple"
+  (vim.api.nvim_win_get_cursor 0))
+
+(defn mark
+  []
+  (core.add marks (get-path) (cursor-location)))
+
+(defn path->bufid
+  [path]
+  "Create/Find buffer with name. path -> bufid"
+  (vim.fn.bufadd path))
+
+(defn swap
+  [bufid]
+  "Swap to buffer. bufid -> void (swaps to buffer)"
+  (vim.api.nvim_set_current_buf bufid))
+
+; (mark)
+; (core.list marks)
+; (path->bufid (get-path))
+; (swap 23)
+
+; Notes
+; ---
+; select mark -> swap

@@ -4,7 +4,6 @@ default: deps compile test
 
 deps:
 	scripts/dep.sh Olical aniseed origin/master
-	scripts/dep.sh nvim-lua plenary.nvim origin/master
 
 compile:
 	rm -rf lua
