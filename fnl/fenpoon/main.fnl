@@ -31,10 +31,19 @@
   "Swap to buffer. bufid -> void (swaps to buffer)"
   (vim.api.nvim_set_current_buf bufid))
 
+(defn init
+  []
+  (print "hello fenpoon"))
+
+(defn log
+  []
+  (print (core.list marks)))
+
+; -- Log mark
+; :lua require"fenpoon.main".mark()
+; :lua require"fenpoon.main".log()
 ; (mark)
-; (core.list marks)
-; (path->bufid (get-path))
-; (swap 23)
+; (log)
 
 ; Notes
 ; ---

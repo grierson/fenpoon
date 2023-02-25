@@ -16,6 +16,6 @@
         row 1
         col 2
         cursor [row col]
-        expected [[1 (.. file ":" row ":" col)]]]
+        expected (.. "1 - " file ":" row ":" col)]
     (fenpoon.add state file cursor)
     (t.pr= expected (fenpoon.list state) "Added files")))

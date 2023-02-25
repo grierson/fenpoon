@@ -35,4 +35,12 @@ local function swap(bufid)
   return vim.api.nvim_set_current_buf(bufid)
 end
 _2amodule_2a["swap"] = swap
+local function init()
+  return print("hello fenpoon")
+end
+_2amodule_2a["init"] = init
+local function log()
+  return print(core.list(marks))
+end
+_2amodule_2a["log"] = log
 return _2amodule_2a

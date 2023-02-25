@@ -1,4 +1,4 @@
-(module fenpoon.core {require {a aniseed.core}})
+(module fenpoon.core {require {a aniseed.core str aniseed.string}})
 
 (defn- contains
   [marks target]
@@ -16,5 +16,5 @@
 (defn list
   [state]
   "Pretty print index with path"
-  (icollect [i [file [row col]] (ipairs state)]
-    [i (.. file ":" row ":" col)]))
+  (str.join "\n" (icollect [i [file [row col]] (ipairs state)]
+                   (a.str i " - " file ":" row ":" col))))
