@@ -39,12 +39,16 @@
   []
   (print (core.list marks)))
 
+(defn select
+  [index]
+  (let [[name cursor] (core.get marks index)
+        bufid (path->bufid name)]
+    (swap bufid)))
+
 ; -- Log mark
-; :lua require"fenpoon.main".mark()
-; :lua require"fenpoon.main".log()
 ; (mark)
 ; (log)
-
-; Notes
-; ---
-; select mark -> swap
+; (select 1)
+; :lua require"fenpoon.main".mark()
+; :lua require"fenpoon.main".log()
+; :lua R"fenpoon.main"

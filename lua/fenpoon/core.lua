@@ -27,19 +27,19 @@ local function contains(marks, target)
   return a.some(_3_, marks)
 end
 _2amodule_locals_2a["contains"] = contains
-local function add(state, path, cursor)
-  if a["nil?"](contains(state, path)) then
-    return table.insert(state, {path, cursor})
+local function add(marks, path, cursor)
+  if a["nil?"](contains(marks, path)) then
+    return table.insert(marks, {path, cursor})
   else
     return nil
   end
 end
 _2amodule_2a["add"] = add
-local function list(state)
+local function list(marks)
   local function _6_()
     local tbl_17_auto = {}
     local i_18_auto = #tbl_17_auto
-    for i, _7_ in ipairs(state) do
+    for i, _7_ in ipairs(marks) do
       local _each_8_ = _7_
       local file = _each_8_[1]
       local _each_9_ = _each_8_[2]
@@ -57,4 +57,8 @@ local function list(state)
   return str.join("\n", _6_())
 end
 _2amodule_2a["list"] = list
+local function get(marks, index)
+  return a.get(marks, index)
+end
+_2amodule_2a["get"] = get
 return _2amodule_2a

@@ -43,4 +43,8 @@ local function log()
   return print(core.list(marks))
 end
 _2amodule_2a["log"] = log
+local function select(index)
+  return core.get(marks, index)
+end
+_2amodule_2a["select"] = select
 return _2amodule_2a

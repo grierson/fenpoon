@@ -8,13 +8,17 @@
                 path)) marks))
 
 (defn add
-  [state path cursor]
+  [marks path cursor]
   "Add new file paths to marks"
-  (when (a.nil? (contains state path))
-    (table.insert state [path cursor])))
+  (when (a.nil? (contains marks path))
+    (table.insert marks [path cursor])))
 
 (defn list
-  [state]
+  [marks]
   "Pretty print index with path"
-  (str.join "\n" (icollect [i [file [row col]] (ipairs state)]
+  (str.join "\n" (icollect [i [file [row col]] (ipairs marks)]
                    (a.str i " - " file ":" row ":" col))))
+
+(defn get
+  [marks index]
+  (a.get marks index))
