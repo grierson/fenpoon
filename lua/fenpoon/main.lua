@@ -35,14 +35,6 @@ local function mark()
   return core.add(marks, get_path())
 end
 _2amodule_2a["mark"] = mark
-local function path__3ebufid(path)
-  return vim.fn.bufadd(path)
-end
-_2amodule_2a["path->bufid"] = path__3ebufid
-local function swap(bufid)
-  return vim.api.nvim_set_current_buf(bufid)
-end
-_2amodule_2a["swap"] = swap
 local function log()
   if a["empty?"](marks) then
     return print("No marks")
@@ -51,17 +43,14 @@ local function log()
   end
 end
 _2amodule_2a["log"] = log
-local function select(index)
-  local name = core.get(marks, index)
-  local bufid = path__3ebufid(name)
-  return swap(bufid)
+local function entry_maker_fn(entry)
+  return {value = entry, ordinal = entry, display = entry, filename = entry}
 end
-_2amodule_2a["select"] = select
 local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
-    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = core.list(marks)}), prompt_title = "Fenpoon"}):find()
+    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = marks, entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

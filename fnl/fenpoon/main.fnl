@@ -18,6 +18,9 @@
   "Init function"
   (print "hello fenpoon"))
 
+(defn relative-path [path]
+  (string.gsub path (vim.loop.cwd) ""))
+
 (defn get-path
   []
   "Get file path relative to project"
@@ -59,13 +62,18 @@
 ; :lua require"fenpoon.main".log()
 ; :lua R"fenpoon.main"
 
+(fn entry-maker-fn [entry]
+  {:value entry :ordinal entry :display (relative-path entry) :filename entry})
+
 (defn telescope
   [opts]
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:finder (finders.new_table {:results (core.list marks)})
+                      {:finder (finders.new_table {:results marks
+                                                   :entry_maker entry-maker-fn})
                        :prompt_title :Fenpoon}) :find)))
 
 ; (mark)
+; (log)
 ; (telescope)
