@@ -1,6 +1,14 @@
 (module fenpoon.main {require {nvim aniseed.nvim
                                a aniseed.core
-                               core fenpoon.core}})
+                               core fenpoon.core
+                               str aniseed.string
+                               themes telescope.themes
+                               actions telescope.actions
+                               actions-state telescope.actions.state
+                               pickers telescope.pickers
+                               finders telescope.finders
+                               builtin telescope.builtin
+                               conf telescope.config}})
 
 ; State
 (var marks [])
@@ -33,7 +41,9 @@
 (defn log
   []
   "Print marked files"
-  (print (core.list marks)))
+  (if (a.empty? marks)
+      (print "No marks")
+      (print (str.join "\n" (core.list marks)))))
 
 (defn select
   [index]
@@ -45,7 +55,17 @@
 ; -- Log mark
 ; (mark)
 ; (log)
-; (select 2)
 ; :lua require"fenpoon.main".mark()
 ; :lua require"fenpoon.main".log()
 ; :lua R"fenpoon.main"
+
+(defn telescope
+  [opts]
+  (if (a.empty? marks)
+      (print "No marks")
+      (: (pickers.new (themes.get_dropdown)
+                      {:finder (finders.new_table {:results (core.list marks)})
+                       :prompt_title :Fenpoon}) :find)))
+
+; (mark)
+; (telescope)

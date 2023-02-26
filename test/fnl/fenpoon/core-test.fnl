@@ -12,6 +12,6 @@
 (deftest list-test
   (let [state []
         file :file/path/foo.fnl
-        expected (.. "1 - " file)]
+        expected [(.. "1 - " file)]]
     (fenpoon.add state file)
     (t.pr= expected (fenpoon.list state) "Added files")))
