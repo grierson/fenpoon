@@ -1,4 +1,6 @@
-(module fenpoon.core-test {require {fenpoon fenpoon.core nvim aniseed.nvim}})
+(module fenpoon.core-test {require {fenpoon fenpoon.core
+                                    nvim aniseed.nvim
+                                    a aniseed.core}})
 
 (deftest add-test
   (let [state []
@@ -12,6 +14,6 @@
 (deftest list-test
   (let [state []
         file :file/path/foo.fnl
-        expected [(.. "1 - " file)]]
+        expected (.. "1 - " file)]
     (fenpoon.add state file)
     (t.pr= expected (fenpoon.list state) "Added files")))

@@ -27,6 +27,10 @@ local function init()
   return print("hello fenpoon")
 end
 _2amodule_2a["init"] = init
+local function relative_path(path)
+  return string.gsub(path, vim.loop.cwd(), "")
+end
+_2amodule_2a["relative-path"] = relative_path
 local function get_path()
   return vim.api.nvim_buf_get_name(0)
 end
@@ -35,22 +39,46 @@ local function mark()
   return core.add(marks, get_path())
 end
 _2amodule_2a["mark"] = mark
+local function path__3ebufid(path)
+  return vim.fn.bufadd(path)
+end
+_2amodule_2a["path->bufid"] = path__3ebufid
+local function swap(bufid)
+  return vim.api.nvim_set_current_buf(bufid)
+end
+_2amodule_2a["swap"] = swap
 local function log()
   if a["empty?"](marks) then
     return print("No marks")
   else
-    return print(str.join("\n", core.list(marks)))
+    return print(core.list(marks))
   end
 end
 _2amodule_2a["log"] = log
-local function entry_maker_fn(entry)
-  return {value = entry, ordinal = entry, display = entry, filename = entry}
+local function select(index)
+  local name = core.get(marks, index)
+  local bufid = path__3ebufid(name)
+  return swap(bufid)
+end
+_2amodule_2a["select"] = select
+local function list__3etable(list)
+  local function _2_(v, _)
+    return v
+  end
+  return a["map-indexed"](_2_, list)
+end
+_2amodule_2a["list->table"] = list__3etable
+local function entry_maker_fn(_3_)
+  local _arg_4_ = _3_
+  local i = _arg_4_[1]
+  local entry = _arg_4_[2]
+  return {value = entry, ordinal = entry, display = a.str(i, " - ", relative_path(entry)), filename = entry}
 end
 local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
-    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = marks, entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
+    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = list__3etable(marks), entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

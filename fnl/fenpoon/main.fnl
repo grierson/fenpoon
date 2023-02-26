@@ -43,10 +43,10 @@
 
 (defn log
   []
-  "Print marked files"
+  "Debugging - print marked files"
   (if (a.empty? marks)
       (print "No marks")
-      (print (str.join "\n" (core.list marks)))))
+      (print (core.list marks))))
 
 (defn select
   [index]
@@ -55,25 +55,26 @@
         bufid (path->bufid name)]
     (swap bufid)))
 
-; -- Log mark
-; (mark)
-; (log)
-; :lua require"fenpoon.main".mark()
-; :lua require"fenpoon.main".log()
-; :lua R"fenpoon.main"
+(defn list->table
+  [list]
+  "[:foo :bar] -> [[1 :foo] [2 :bar]]"
+  (a.map-indexed (fn [v] v) list))
 
-(fn entry-maker-fn [entry]
-  {:value entry :ordinal entry :display (relative-path entry) :filename entry})
+(defn entry-maker-fn
+  [[i entry]]
+  "Make telescope list item"
+  {:value entry
+   :ordinal entry
+   :display (a.str i " - " (relative-path entry))
+   :filename entry})
 
 (defn telescope
   [opts]
+  "Open telescope"
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:finder (finders.new_table {:results marks
+                      {:sorter (conf.generic_sorter opts)
+                       :finder (finders.new_table {:results (list->table marks)
                                                    :entry_maker entry-maker-fn})
                        :prompt_title :Fenpoon}) :find)))
-
-; (mark)
-; (log)
-; (telescope)

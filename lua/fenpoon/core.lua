@@ -33,17 +33,20 @@ local function add(marks, path)
 end
 _2amodule_2a["add"] = add
 local function list(marks)
-  local tbl_17_auto = {}
-  local i_18_auto = #tbl_17_auto
-  for i, file in pairs(marks) do
-    local val_19_auto = a.str(i, " - ", file)
-    if (nil ~= val_19_auto) then
-      i_18_auto = (i_18_auto + 1)
-      do end (tbl_17_auto)[i_18_auto] = val_19_auto
-    else
+  local function _4_()
+    local tbl_17_auto = {}
+    local i_18_auto = #tbl_17_auto
+    for i, file in pairs(marks) do
+      local val_19_auto = a.str(i, " - ", file)
+      if (nil ~= val_19_auto) then
+        i_18_auto = (i_18_auto + 1)
+        do end (tbl_17_auto)[i_18_auto] = val_19_auto
+      else
+      end
     end
+    return tbl_17_auto
   end
-  return tbl_17_auto
+  return str.join("\n", _4_())
 end
 _2amodule_2a["list"] = list
 local function get(marks, index)

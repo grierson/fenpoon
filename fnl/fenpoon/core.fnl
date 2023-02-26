@@ -16,8 +16,8 @@
 (defn list
   [marks]
   "Pretty print index with path"
-  (icollect [i file (pairs marks)]
-    (a.str i " - " file)))
+  (str.join "\n" (icollect [i file (pairs marks)]
+                   (a.str i " - " file))))
 
 (defn get
   [marks index]
