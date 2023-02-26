@@ -65,6 +65,4 @@ local function telescope(opts)
   end
 end
 _2amodule_2a["telescope"] = telescope
-mark()
-telescope()
 return _2amodule_2a
