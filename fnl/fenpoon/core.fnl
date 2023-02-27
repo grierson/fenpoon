@@ -1,17 +1,28 @@
 (module fenpoon.core {require {a aniseed.core str aniseed.string}})
 
 (defn- contains
-  [marks target]
-  "Is file path in marks?"
-  (a.some (fn [path]
-            (if (= path target)
-                path)) marks))
+  [coll target]
+  "Is target in coll"
+  (a.some (fn [v] (if (= v target) v)) coll))
+
+(defn next-id
+  [current-ids target]
+  "Get net available index"
+  (let [target (or target 1)]
+    (if (contains current-ids target)
+        (next-id current-ids (a.inc target))
+        target)))
 
 (defn add
-  [marks path]
-  "Add new file paths to marks"
-  (when (a.nil? (contains marks path))
-    (table.insert marks path)))
+  [marks file]
+  "Add new file to marks"
+  (if (contains (a.vals marks) file)
+      marks
+      (a.assoc marks (next-id (a.keys marks)) file)))
+
+(defn remove
+  [marks id]
+  (a.assoc marks id nil))
 
 (defn list
   [marks]
@@ -19,7 +30,7 @@
   (str.join "\n" (icollect [i file (pairs marks)]
                    (a.str i " - " file))))
 
-(defn get
-  [marks index]
-  "Get path from marks by index"
-  (a.get marks index))
+(defn relative-path
+  [proj file]
+  "Remove project from file path"
+  (string.gsub file proj ""))

@@ -10,12 +10,10 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local a, actions, actions_state, builtin, conf, core, finders, nvim, pickers, str, themes = require("fenpoon.aniseed.core"), require("telescope.actions"), require("telescope.actions.state"), require("telescope.builtin"), require("telescope.config"), require("fenpoon.core"), require("telescope.finders"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("fenpoon.aniseed.string"), require("telescope.themes")
+local a, actions, actions_state, core, finders, nvim, pickers, str, themes = require("fenpoon.aniseed.core"), require("telescope.actions"), require("telescope.actions.state"), require("fenpoon.core"), require("telescope.finders"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("fenpoon.aniseed.string"), require("telescope.themes")
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["actions"] = actions
 _2amodule_locals_2a["actions-state"] = actions_state
-_2amodule_locals_2a["builtin"] = builtin
-_2amodule_locals_2a["conf"] = conf
 _2amodule_locals_2a["core"] = core
 _2amodule_locals_2a["finders"] = finders
 _2amodule_locals_2a["nvim"] = nvim
@@ -27,26 +25,26 @@ local function init()
   return print("hello fenpoon")
 end
 _2amodule_2a["init"] = init
-local function relative_path(path)
-  return string.gsub(path, vim.loop.cwd(), "")
+local function project_path()
+  return vim.loop.cwd()
 end
-_2amodule_2a["relative-path"] = relative_path
-local function get_path()
+_2amodule_2a["project-path"] = project_path
+local function file_path()
   return vim.api.nvim_buf_get_name(0)
 end
-_2amodule_2a["get-path"] = get_path
+_2amodule_2a["file-path"] = file_path
 local function mark()
-  return core.add(marks, get_path())
+  return core.add(marks, file_path())
 end
 _2amodule_2a["mark"] = mark
+local function delete(index)
+  return core.remove(marks, index)
+end
+_2amodule_2a["delete"] = delete
 local function path__3ebufid(path)
   return vim.fn.bufadd(path)
 end
 _2amodule_2a["path->bufid"] = path__3ebufid
-local function swap(bufid)
-  return vim.api.nvim_set_current_buf(bufid)
-end
-_2amodule_2a["swap"] = swap
 local function log()
   if a["empty?"](marks) then
     return print("No marks")
@@ -55,30 +53,26 @@ local function log()
   end
 end
 _2amodule_2a["log"] = log
+local function swap(bufid)
+  return vim.api.nvim_set_current_buf(bufid)
+end
+_2amodule_2a["swap"] = swap
 local function select(index)
   local name = core.get(marks, index)
   local bufid = path__3ebufid(name)
   return swap(bufid)
 end
 _2amodule_2a["select"] = select
-local function list__3etable(list)
-  local function _2_(v, _)
-    return v
-  end
-  return a["map-indexed"](_2_, list)
+local function entry_maker_fn(v)
+  print(v)
+  return {value = v, ordinal = v, display = core["relative-path"](project_path(), v), filename = v}
 end
-_2amodule_2a["list->table"] = list__3etable
-local function entry_maker_fn(_3_)
-  local _arg_4_ = _3_
-  local i = _arg_4_[1]
-  local entry = _arg_4_[2]
-  return {value = entry, ordinal = entry, display = a.str(i, " - ", relative_path(entry)), filename = entry}
-end
+_2amodule_2a["entry-maker-fn"] = entry_maker_fn
 local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
-    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = list__3etable(marks), entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
+    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = marks, entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

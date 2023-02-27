@@ -6,40 +6,31 @@
                                actions telescope.actions
                                actions-state telescope.actions.state
                                pickers telescope.pickers
-                               finders telescope.finders
-                               builtin telescope.builtin
-                               conf telescope.config}})
+                               finders telescope.finders}})
 
-; State
-(var marks [])
+; marks
+; {1 :file/full/path
+;  2 :other/full/path}
+(var marks {})
 
-(defn init
-  []
-  "Init function"
-  (print "hello fenpoon"))
-
-(defn relative-path [path]
-  (string.gsub path (vim.loop.cwd) ""))
-
-(defn get-path
-  []
-  "Get file path relative to project"
-  (vim.api.nvim_buf_get_name 0))
+(defn init [] (print "hello fenpoon"))
+(defn project-path [] (vim.loop.cwd))
+(defn file-path [] (vim.api.nvim_buf_get_name 0))
 
 (defn mark
   []
   "Add file to marks"
-  (core.add marks (get-path)))
+  (core.add marks (file-path)))
+
+(defn delete
+  [index]
+  "Add file to marks"
+  (core.remove marks index))
 
 (defn path->bufid
   [path]
   "Create/Find buffer with name. path -> bufid"
   (vim.fn.bufadd path))
-
-(defn swap
-  [bufid]
-  "Swap to buffer. bufid -> void (swaps to buffer)"
-  (vim.api.nvim_set_current_buf bufid))
 
 (defn log
   []
@@ -48,6 +39,11 @@
       (print "No marks")
       (print (core.list marks))))
 
+(defn swap
+  [bufid]
+  "Swap to buffer. bufid -> void (swaps to buffer)"
+  (vim.api.nvim_set_current_buf bufid))
+
 (defn select
   [index]
   "Use index to switch to buffer"
@@ -55,18 +51,13 @@
         bufid (path->bufid name)]
     (swap bufid)))
 
-(defn list->table
-  [list]
-  "[:foo :bar] -> [[1 :foo] [2 :bar]]"
-  (a.map-indexed (fn [v] v) list))
-
 (defn entry-maker-fn
-  [[i entry]]
-  "Make telescope list item"
-  {:value entry
-   :ordinal entry
-   :display (a.str i " - " (relative-path entry))
-   :filename entry})
+  [v]
+  (print v)
+  {:value v
+   :ordinal v
+   :display (core.relative-path (project-path) v)
+   :filename v})
 
 (defn telescope
   [opts]
@@ -74,7 +65,6 @@
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:sorter (conf.generic_sorter opts)
-                       :finder (finders.new_table {:results (list->table marks)
+                      {:finder (finders.new_table {:results marks
                                                    :entry_maker entry-maker-fn})
                        :prompt_title :Fenpoon}) :find)))
