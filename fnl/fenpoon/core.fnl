@@ -2,7 +2,7 @@
 
 ;; Generic functions
 
-(defn- contains
+(defn contains
   [coll target]
   "Is target in coll"
   (a.some (fn [v] (if (= v target) v)) coll))

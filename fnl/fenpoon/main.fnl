@@ -51,7 +51,18 @@
   "Add file to marks"
   (core.remove marks index))
 
-(defn delete-mark
+(defn select
+  [index]
+  "Use index to switch to buffer"
+  (if (core.contains (a.keys marks) index)
+      (let [name (a.get marks index)
+            bufid (path->bufid name)]
+        (vim.api.nvim_set_current_buf bufid))
+      (print (a.str "No " index " mark"))))
+
+;; Telescope
+
+(defn telescope-delete-mark
   [prompt-bufnr]
   (let [confirmation (vim.fn.input "Delete? [y/n]: ")
         {: index} (actions-state.get_selected_entry)]
@@ -62,24 +73,15 @@
           (local current-picker (actions-state.get_current_picker prompt-bufnr))
           (current-picker:refresh (make-finder) {:reset_prompt true})))))
 
-(defn select
-  [index]
-  "Use index to switch to buffer"
-  (if (core.contains (a.keys marks) index)
-      (let [name (a.get marks index)
-            bufid (path->bufid name)]
-        (vim.api.nvim_set_current_buf bufid))
-      (print (a.str "No " index " mark"))))
-
 (defn telescope
   [opts]
   "Open telescope"
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:finder (make-finder)
-                       :prompt_title :Fenpoon
+                      {:prompt_title :Fenpoon
+                       :finder (make-finder)
                        :attach_mappings (fn [_ map]
-                                          (map :i :<c-d> delete-mark)
-                                          (map :n :<c-d> delete-mark)
+                                          (map :i :<c-d> telescope-delete-mark)
+                                          (map :n :<c-d> telescope-delete-mark)
                                           true)}) :find)))
