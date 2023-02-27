@@ -13,9 +13,31 @@
 ;  2 :other/full/path}
 (var marks {})
 
+;; Helpers
+
 (defn init [] (print "hello fenpoon"))
 (defn project-path [] (vim.loop.cwd))
 (defn file-path [] (vim.api.nvim_buf_get_name 0))
+(defn- path->bufid
+  [path]
+  "Create/Find buffer with name. path -> bufid"
+  (vim.fn.bufadd path))
+
+(defn debug
+  []
+  "Debugging - print marked files"
+  (if (a.empty? marks)
+      (print "No marks")
+      (print (core.list marks))))
+
+(defn entry-maker-fn
+  [[i file]]
+  {:value file
+   :ordinal i
+   :display (a.str i " - " (core.relative-path (project-path) file))
+   :filename file})
+
+;; Api
 
 (defn mark
   []
@@ -27,37 +49,14 @@
   "Add file to marks"
   (core.remove marks index))
 
-(defn path->bufid
-  [path]
-  "Create/Find buffer with name. path -> bufid"
-  (vim.fn.bufadd path))
-
-(defn log
-  []
-  "Debugging - print marked files"
-  (if (a.empty? marks)
-      (print "No marks")
-      (print (core.list marks))))
-
-(defn swap
-  [bufid]
-  "Swap to buffer. bufid -> void (swaps to buffer)"
-  (vim.api.nvim_set_current_buf bufid))
-
 (defn select
   [index]
   "Use index to switch to buffer"
-  (let [name (core.get marks index)
-        bufid (path->bufid name)]
-    (swap bufid)))
-
-(defn entry-maker-fn
-  [v]
-  (print v)
-  {:value v
-   :ordinal v
-   :display (core.relative-path (project-path) v)
-   :filename v})
+  (if (core.contains (a.keys marks) index)
+      (let [name (a.get marks index)
+            bufid (path->bufid name)]
+        (vim.api.nvim_set_current_buf bufid))
+      (print (a.str "No " index " mark"))))
 
 (defn telescope
   [opts]
@@ -65,6 +64,6 @@
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:finder (finders.new_table {:results marks
+                      {:finder (finders.new_table {:results (core.table->tuples marks)
                                                    :entry_maker entry-maker-fn})
                        :prompt_title :Fenpoon}) :find)))

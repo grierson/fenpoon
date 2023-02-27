@@ -24,6 +24,13 @@ local function contains(coll, target)
   return a.some(_1_, coll)
 end
 _2amodule_locals_2a["contains"] = contains
+local function table__3etuples(coll)
+  local function _3_(x)
+    return x
+  end
+  return a["map-indexed"](_3_, coll)
+end
+_2amodule_2a["table->tuples"] = table__3etuples
 local function next_id(current_ids, target)
   local target0 = (target or 1)
   if contains(current_ids, target0) then
@@ -46,7 +53,7 @@ local function remove(marks, id)
 end
 _2amodule_2a["remove"] = remove
 local function list(marks)
-  local function _5_()
+  local function _6_()
     local tbl_17_auto = {}
     local i_18_auto = #tbl_17_auto
     for i, file in pairs(marks) do
@@ -59,7 +66,7 @@ local function list(marks)
     end
     return tbl_17_auto
   end
-  return str.join("\n", _5_())
+  return str.join("\n", _6_())
 end
 _2amodule_2a["list"] = list
 local function relative_path(proj, file)

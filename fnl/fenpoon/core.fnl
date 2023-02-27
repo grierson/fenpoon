@@ -1,9 +1,18 @@
 (module fenpoon.core {require {a aniseed.core str aniseed.string}})
 
+;; Generic functions
+
 (defn- contains
   [coll target]
   "Is target in coll"
   (a.some (fn [v] (if (= v target) v)) coll))
+
+(defn table->tuples
+  [coll]
+  "{1 :foo 2 :bar} -> [[1 :foo] [2 :bar]]"
+  (a.map-indexed (fn [x] x) coll))
+
+;; Doamin
 
 (defn next-id
   [current-ids target]

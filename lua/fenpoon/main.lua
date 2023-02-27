@@ -33,6 +33,25 @@ local function file_path()
   return vim.api.nvim_buf_get_name(0)
 end
 _2amodule_2a["file-path"] = file_path
+local function path__3ebufid(path)
+  return vim.fn.bufadd(path)
+end
+_2amodule_locals_2a["path->bufid"] = path__3ebufid
+local function debug()
+  if a["empty?"](marks) then
+    return print("No marks")
+  else
+    return print(core.list(marks))
+  end
+end
+_2amodule_2a["debug"] = debug
+local function entry_maker_fn(_2_)
+  local _arg_3_ = _2_
+  local i = _arg_3_[1]
+  local file = _arg_3_[2]
+  return {value = file, ordinal = i, display = a.str(i, " - ", core["relative-path"](project_path(), file)), filename = file}
+end
+_2amodule_2a["entry-maker-fn"] = entry_maker_fn
 local function mark()
   return core.add(marks, file_path())
 end
@@ -41,38 +60,21 @@ local function delete(index)
   return core.remove(marks, index)
 end
 _2amodule_2a["delete"] = delete
-local function path__3ebufid(path)
-  return vim.fn.bufadd(path)
-end
-_2amodule_2a["path->bufid"] = path__3ebufid
-local function log()
-  if a["empty?"](marks) then
-    return print("No marks")
+local function select(index)
+  if core.contains(a.keys(marks), index) then
+    local name = a.get(marks, index)
+    local bufid = path__3ebufid(name)
+    return vim.api.nvim_set_current_buf(bufid)
   else
-    return print(core.list(marks))
+    return print(a.str("No ", index, " mark"))
   end
 end
-_2amodule_2a["log"] = log
-local function swap(bufid)
-  return vim.api.nvim_set_current_buf(bufid)
-end
-_2amodule_2a["swap"] = swap
-local function select(index)
-  local name = core.get(marks, index)
-  local bufid = path__3ebufid(name)
-  return swap(bufid)
-end
 _2amodule_2a["select"] = select
-local function entry_maker_fn(v)
-  print(v)
-  return {value = v, ordinal = v, display = core["relative-path"](project_path(), v), filename = v}
-end
-_2amodule_2a["entry-maker-fn"] = entry_maker_fn
 local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
-    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = marks, entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
+    return pickers.new(themes.get_dropdown(), {finder = finders.new_table({results = core["table->tuples"](marks), entry_maker = entry_maker_fn}), prompt_title = "Fenpoon"}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope
