@@ -23,7 +23,7 @@ local function contains(coll, target)
   end
   return a.some(_1_, coll)
 end
-_2amodule_locals_2a["contains"] = contains
+_2amodule_2a["contains"] = contains
 local function table__3etuples(coll)
   local function _3_(x)
     return x

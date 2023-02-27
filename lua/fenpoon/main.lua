@@ -64,19 +64,6 @@ local function delete(index)
   return core.remove(marks, index)
 end
 _2amodule_2a["delete"] = delete
-local function delete_mark(prompt_bufnr)
-  local confirmation = vim.fn.input("Delete? [y/n]: ")
-  local _let_4_ = actions_state.get_selected_entry()
-  local index = _let_4_["index"]
-  if (string.len(confirmation) == 0) then
-    return print("Didn't delete mark")
-  else
-    delete(index)
-    local current_picker = actions_state.get_current_picker(prompt_bufnr)
-    return current_picker:refresh(make_finder(), {reset_prompt = true})
-  end
-end
-_2amodule_2a["delete-mark"] = delete_mark
 local function select(index)
   if core.contains(a.keys(marks), index) then
     local name = a.get(marks, index)
@@ -87,16 +74,29 @@ local function select(index)
   end
 end
 _2amodule_2a["select"] = select
+local function telescope_delete_mark(prompt_bufnr)
+  local confirmation = vim.fn.input("Delete? [y/n]: ")
+  local _let_5_ = actions_state.get_selected_entry()
+  local index = _let_5_["index"]
+  if (string.len(confirmation) == 0) then
+    return print("Didn't delete mark")
+  else
+    delete(index)
+    local current_picker = actions_state.get_current_picker(prompt_bufnr)
+    return current_picker:refresh(make_finder(), {reset_prompt = true})
+  end
+end
+_2amodule_2a["telescope-delete-mark"] = telescope_delete_mark
 local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
     local function _7_(_, map)
-      map("i", "<c-d>", delete_mark)
-      map("n", "<c-d>", delete_mark)
+      map("i", "<c-d>", telescope_delete_mark)
+      map("n", "<c-d>", telescope_delete_mark)
       return true
     end
-    return pickers.new(themes.get_dropdown(), {finder = make_finder(), prompt_title = "Fenpoon", attach_mappings = _7_}):find()
+    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(), attach_mappings = _7_}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope
