@@ -8,9 +8,6 @@
                                pickers telescope.pickers
                                finders telescope.finders}})
 
-; marks
-; {1 :file/full/path
-;  2 :other/full/path}
 (var marks {})
 
 ;; Helpers
@@ -37,6 +34,11 @@
    :display (a.str i " - " (core.relative-path (project-path) file))
    :filename file})
 
+(defn make-finder
+  []
+  (finders.new_table {:results (core.table->tuples marks)
+                      :entry_maker entry-maker-fn}))
+
 ;; Api
 
 (defn mark
@@ -48,6 +50,17 @@
   [index]
   "Add file to marks"
   (core.remove marks index))
+
+(defn delete-mark
+  [prompt-bufnr]
+  (let [confirmation (vim.fn.input "Delete? [y/n]: ")
+        {: index} (actions-state.get_selected_entry)]
+    (if (= (string.len confirmation) 0)
+        (print "Didn't delete mark")
+        (do
+          (delete index)
+          (local current-picker (actions-state.get_current_picker prompt-bufnr))
+          (current-picker:refresh (make-finder) {:reset_prompt true})))))
 
 (defn select
   [index]
@@ -64,6 +77,9 @@
   (if (a.empty? marks)
       (print "No marks")
       (: (pickers.new (themes.get_dropdown)
-                      {:finder (finders.new_table {:results (core.table->tuples marks)
-                                                   :entry_maker entry-maker-fn})
-                       :prompt_title :Fenpoon}) :find)))
+                      {:finder (make-finder)
+                       :prompt_title :Fenpoon
+                       :attach_mappings (fn [_ map]
+                                          (map :i :<c-d> delete-mark)
+                                          (map :n :<c-d> delete-mark)
+                                          true)}) :find)))
