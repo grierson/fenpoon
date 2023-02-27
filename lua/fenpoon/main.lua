@@ -22,7 +22,7 @@ _2amodule_locals_2a["str"] = str
 _2amodule_locals_2a["themes"] = themes
 local marks = {}
 local function init()
-  return print("hello fenpoon")
+  return true
 end
 _2amodule_2a["init"] = init
 local function project_path()
@@ -37,6 +37,17 @@ local function path__3ebufid(path)
   return vim.fn.bufadd(path)
 end
 _2amodule_locals_2a["path->bufid"] = path__3ebufid
+local function entry_maker_fn(_1_)
+  local _arg_2_ = _1_
+  local i = _arg_2_[1]
+  local file = _arg_2_[2]
+  return {value = file, ordinal = i, display = a.str(i, " - ", core["relative-path"](project_path(), file)), filename = file}
+end
+_2amodule_locals_2a["entry-maker-fn"] = entry_maker_fn
+local function make_finder()
+  return finders.new_table({results = core["table->tuples"](marks), entry_maker = entry_maker_fn})
+end
+_2amodule_locals_2a["make-finder"] = make_finder
 local function debug()
   if a["empty?"](marks) then
     return print("No marks")
@@ -45,17 +56,6 @@ local function debug()
   end
 end
 _2amodule_2a["debug"] = debug
-local function entry_maker_fn(_2_)
-  local _arg_3_ = _2_
-  local i = _arg_3_[1]
-  local file = _arg_3_[2]
-  return {value = file, ordinal = i, display = a.str(i, " - ", core["relative-path"](project_path(), file)), filename = file}
-end
-_2amodule_2a["entry-maker-fn"] = entry_maker_fn
-local function make_finder()
-  return finders.new_table({results = core["table->tuples"](marks), entry_maker = entry_maker_fn})
-end
-_2amodule_2a["make-finder"] = make_finder
 local function mark()
   return core.add(marks, file_path())
 end
@@ -100,6 +100,4 @@ local function telescope(opts)
   end
 end
 _2amodule_2a["telescope"] = telescope
-mark()
-telescope()
 return _2amodule_2a

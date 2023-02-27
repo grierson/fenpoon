@@ -12,7 +12,7 @@
 
 ;; Helpers
 
-(defn init [] (print "hello fenpoon"))
+(defn init [] true)
 (defn project-path [] (vim.loop.cwd))
 (defn file-path [] (vim.api.nvim_buf_get_name 0))
 (defn- path->bufid
@@ -20,24 +20,24 @@
   "Create/Find buffer with name. path -> bufid"
   (vim.fn.bufadd path))
 
-(defn debug
-  []
-  "Debugging - print marked files"
-  (if (a.empty? marks)
-      (print "No marks")
-      (print (core.list marks))))
-
-(defn entry-maker-fn
+(defn- entry-maker-fn
   [[i file]]
   {:value file
    :ordinal i
    :display (a.str i " - " (core.relative-path (project-path) file))
    :filename file})
 
-(defn make-finder
+(defn- make-finder
   []
   (finders.new_table {:results (core.table->tuples marks)
                       :entry_maker entry-maker-fn}))
+
+(defn debug
+  []
+  "Debugging - print marked files"
+  (if (a.empty? marks)
+      (print "No marks")
+      (print (core.list marks))))
 
 ;; Api
 
