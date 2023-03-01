@@ -22,7 +22,7 @@
 
 ;; Helpers
 
-(defn init [] true)
+(defn init [] (set marks (read-cache)))
 (defn project-path [] (vim.loop.cwd))
 (defn file-path [] (nvim.buf_get_name 0))
 
@@ -49,7 +49,9 @@
 (defn mark
   []
   "Add file to marks"
-  (core.add marks (file-path)))
+  (do
+    (core.add marks (file-path))
+    (write-cache marks)))
 
 (defn select
   [id]
@@ -70,6 +72,7 @@
         (print "Didn't delete mark")
         (do
           (core.remove marks index)
+          (write-cache marks)
           (local current-picker (actions-state.get_current_picker prompt-bufnr))
           (current-picker:refresh (make-finder) {:reset_prompt true})))))
 
@@ -85,8 +88,3 @@
                                           (map :i :<c-d> telescope-delete-mark)
                                           (map :n :<c-d> telescope-delete-mark)
                                           true)}) :find)))
-
-; (mark)
-; (telescope)
-; (debug)
-; (select 1)

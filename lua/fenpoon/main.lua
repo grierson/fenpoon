@@ -32,7 +32,8 @@ end
 _2amodule_2a["write-cache"] = write_cache
 local marks = {}
 local function init()
-  return true
+  marks = read_cache()
+  return nil
 end
 _2amodule_2a["init"] = init
 local function project_path()
@@ -63,7 +64,8 @@ local function debug()
 end
 _2amodule_2a["debug"] = debug
 local function mark()
-  return core.add(marks, file_path())
+  core.add(marks, file_path())
+  return write_cache(marks)
 end
 _2amodule_2a["mark"] = mark
 local function select(id)
@@ -89,6 +91,7 @@ local function telescope_delete_mark(prompt_bufnr)
     return print("Didn't delete mark")
   else
     core.remove(marks, index)
+    write_cache(marks)
     local current_picker = actions_state.get_current_picker(prompt_bufnr)
     return current_picker:refresh(make_finder(), {reset_prompt = true})
   end
