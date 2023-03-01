@@ -24,36 +24,66 @@ local function contains(coll, target)
   return a.some(_1_, coll)
 end
 _2amodule_2a["contains"] = contains
-local function table__3etuples(coll)
-  local function _3_(x)
-    return x
+local function find_mark_by_id(coll, target_id)
+  for i, v in ipairs(coll) do
+    local _let_3_ = v
+    local id = _let_3_["id"]
+    if (id == target_id) then
+      return v
+    else
+    end
   end
-  return a["map-indexed"](_3_, coll)
+  return nil
 end
-_2amodule_2a["table->tuples"] = table__3etuples
-local function next_id(current_ids, target)
-  local target0 = (target or 1)
-  if contains(current_ids, target0) then
-    return next_id(current_ids, a.inc(target0))
+_2amodule_2a["find-mark-by-id"] = find_mark_by_id
+local function find_mark_index_by_id(coll, target_id)
+  for i, _5_ in ipairs(coll) do
+    local _each_6_ = _5_
+    local id = _each_6_["id"]
+    if (id == target_id) then
+      return i
+    else
+    end
+  end
+  return nil
+end
+_2amodule_2a["find-mark-index-by-id"] = find_mark_index_by_id
+local function next_id(current_ids, _3ftarget)
+  local target = (_3ftarget or 1)
+  if contains(current_ids, target) then
+    return next_id(current_ids, a.inc(target))
   else
-    return target0
+    return target
   end
 end
 _2amodule_2a["next-id"] = next_id
 local function add(marks, file)
-  if contains(a.vals(marks), file) then
+  local function _11_(_9_)
+    local _arg_10_ = _9_
+    local file0 = _arg_10_["file"]
+    return file0
+  end
+  if contains(a.map(_11_, marks), file) then
     return marks
   else
-    return a.assoc(marks, next_id(a.keys(marks)), file)
+    local id
+    local function _14_(_12_)
+      local _arg_13_ = _12_
+      local id0 = _arg_13_["id"]
+      return id0
+    end
+    id = next_id(a.map(_14_, marks))
+    return table.insert(marks, {id = id, file = file})
   end
 end
 _2amodule_2a["add"] = add
 local function remove(marks, id)
-  return a.assoc(marks, id, nil)
+  local mark_index = find_mark_index_by_id(marks, id)
+  return table.remove(marks, mark_index)
 end
 _2amodule_2a["remove"] = remove
 local function list(marks)
-  local function _6_()
+  local function _16_()
     local tbl_17_auto = {}
     local i_18_auto = #tbl_17_auto
     for i, file in pairs(marks) do
@@ -66,7 +96,7 @@ local function list(marks)
     end
     return tbl_17_auto
   end
-  return str.join("\n", _6_())
+  return str.join("\n", _16_())
 end
 _2amodule_2a["list"] = list
 local function relative_path(proj, file)

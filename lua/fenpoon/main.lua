@@ -20,6 +20,16 @@ _2amodule_locals_2a["nvim"] = nvim
 _2amodule_locals_2a["pickers"] = pickers
 _2amodule_locals_2a["str"] = str
 _2amodule_locals_2a["themes"] = themes
+local cache = ((_2amodule_2a).cache or a.str(nvim.fn.stdpath("data"), "/fenpoon.json"))
+do end (_2amodule_2a)["cache"] = cache
+local function read_cache()
+  return nvim.fn.json_decode(a.slurp(cache))
+end
+_2amodule_2a["read-cache"] = read_cache
+local function write_cache(marks)
+  return a.spit(cache, nvim.fn.json_encode(marks))
+end
+_2amodule_2a["write-cache"] = write_cache
 local marks = {}
 local function init()
   return true
@@ -30,22 +40,18 @@ local function project_path()
 end
 _2amodule_2a["project-path"] = project_path
 local function file_path()
-  return vim.api.nvim_buf_get_name(0)
+  return nvim.buf_get_name(0)
 end
 _2amodule_2a["file-path"] = file_path
-local function path__3ebufid(path)
-  return vim.fn.bufadd(path)
-end
-_2amodule_locals_2a["path->bufid"] = path__3ebufid
 local function entry_maker_fn(_1_)
   local _arg_2_ = _1_
-  local i = _arg_2_[1]
-  local file = _arg_2_[2]
-  return {value = file, ordinal = i, display = a.str(i, " - ", core["relative-path"](project_path(), file)), filename = file}
+  local id = _arg_2_["id"]
+  local file = _arg_2_["file"]
+  return {value = file, ordinal = id, display = a.str(id, " - ", core["relative-path"](project_path(), file)), filename = file}
 end
 _2amodule_locals_2a["entry-maker-fn"] = entry_maker_fn
 local function make_finder()
-  return finders.new_table({results = core["table->tuples"](marks), entry_maker = entry_maker_fn})
+  return finders.new_table({results = marks, entry_maker = entry_maker_fn})
 end
 _2amodule_locals_2a["make-finder"] = make_finder
 local function debug()
@@ -60,28 +66,29 @@ local function mark()
   return core.add(marks, file_path())
 end
 _2amodule_2a["mark"] = mark
-local function delete(index)
-  return core.remove(marks, index)
-end
-_2amodule_2a["delete"] = delete
-local function select(index)
-  if core.contains(a.keys(marks), index) then
-    local name = a.get(marks, index)
-    local bufid = path__3ebufid(name)
-    return vim.api.nvim_set_current_buf(bufid)
+local function select(id)
+  local function _6_(_4_)
+    local _arg_5_ = _4_
+    local id0 = _arg_5_["id"]
+    return id0
+  end
+  if core.contains(a.map(_6_, marks), id) then
+    local file = a.get(core["find-mark-by-id"](marks, id), "file")
+    local bufid = nvim.fn.bufadd(file)
+    return nvim.set_current_buf(bufid)
   else
-    return print(a.str("No ", index, " mark"))
+    return print(a.str("No ", id, " mark"))
   end
 end
 _2amodule_2a["select"] = select
 local function telescope_delete_mark(prompt_bufnr)
-  local confirmation = vim.fn.input("Delete? [y/n]: ")
-  local _let_5_ = actions_state.get_selected_entry()
-  local index = _let_5_["index"]
+  local confirmation = nvim.fn.input("Delete? [y/n]: ")
+  local _let_8_ = actions_state.get_selected_entry()
+  local index = _let_8_["index"]
   if (string.len(confirmation) == 0) then
     return print("Didn't delete mark")
   else
-    delete(index)
+    core.remove(marks, index)
     local current_picker = actions_state.get_current_picker(prompt_bufnr)
     return current_picker:refresh(make_finder(), {reset_prompt = true})
   end
@@ -91,12 +98,12 @@ local function telescope(opts)
   if a["empty?"](marks) then
     return print("No marks")
   else
-    local function _7_(_, map)
+    local function _10_(_, map)
       map("i", "<c-d>", telescope_delete_mark)
       map("n", "<c-d>", telescope_delete_mark)
       return true
     end
-    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(), attach_mappings = _7_}):find()
+    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(), attach_mappings = _10_}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

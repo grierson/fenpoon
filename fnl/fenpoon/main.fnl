@@ -8,29 +8,34 @@
                                pickers telescope.pickers
                                finders telescope.finders}})
 
-(var marks {})
+(defonce cache (a.str (nvim.fn.stdpath :data) :/fenpoon.json))
+
+(defn read-cache
+  []
+  (nvim.fn.json_decode (a.slurp cache)))
+
+(defn write-cache
+  [marks]
+  (a.spit cache (nvim.fn.json_encode marks)))
+
+(var marks [])
 
 ;; Helpers
 
 (defn init [] true)
 (defn project-path [] (vim.loop.cwd))
-(defn file-path [] (vim.api.nvim_buf_get_name 0))
-(defn- path->bufid
-  [path]
-  "Create/Find buffer with name. path -> bufid"
-  (vim.fn.bufadd path))
+(defn file-path [] (nvim.buf_get_name 0))
 
 (defn- entry-maker-fn
-  [[i file]]
+  [{: id : file}]
   {:value file
-   :ordinal i
-   :display (a.str i " - " (core.relative-path (project-path) file))
+   :ordinal id
+   :display (a.str id " - " (core.relative-path (project-path) file))
    :filename file})
 
 (defn- make-finder
   []
-  (finders.new_table {:results (core.table->tuples marks)
-                      :entry_maker entry-maker-fn}))
+  (finders.new_table {:results marks :entry_maker entry-maker-fn}))
 
 (defn debug
   []
@@ -46,30 +51,25 @@
   "Add file to marks"
   (core.add marks (file-path)))
 
-(defn delete
-  [index]
-  "Add file to marks"
-  (core.remove marks index))
-
 (defn select
-  [index]
-  "Use index to switch to buffer"
-  (if (core.contains (a.keys marks) index)
-      (let [name (a.get marks index)
-            bufid (path->bufid name)]
-        (vim.api.nvim_set_current_buf bufid))
-      (print (a.str "No " index " mark"))))
+  [id]
+  "Use id to switch to buffer"
+  (if (core.contains (a.map (fn [{: id}] id) marks) id)
+      (let [file (a.get (core.find-mark-by-id marks id) :file)
+            bufid (nvim.fn.bufadd file)]
+        (nvim.set_current_buf bufid))
+      (print (a.str "No " id " mark"))))
 
 ;; Telescope
 
 (defn telescope-delete-mark
   [prompt-bufnr]
-  (let [confirmation (vim.fn.input "Delete? [y/n]: ")
+  (let [confirmation (nvim.fn.input "Delete? [y/n]: ")
         {: index} (actions-state.get_selected_entry)]
     (if (= (string.len confirmation) 0)
         (print "Didn't delete mark")
         (do
-          (delete index)
+          (core.remove marks index)
           (local current-picker (actions-state.get_current_picker prompt-bufnr))
           (current-picker:refresh (make-finder) {:reset_prompt true})))))
 
@@ -85,3 +85,8 @@
                                           (map :i :<c-d> telescope-delete-mark)
                                           (map :n :<c-d> telescope-delete-mark)
                                           true)}) :find)))
+
+; (mark)
+; (telescope)
+; (debug)
+; (select 1)
