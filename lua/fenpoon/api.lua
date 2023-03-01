@@ -38,8 +38,13 @@ local function debug()
 end
 _2amodule_2a["debug"] = debug
 local function mark()
-  core.add(MARKS, file_path())
-  return cache.write(MARKS)
+  local file = file_path()
+  if not a["empty?"](file) then
+    core.add(MARKS, file)
+    return cache.write(MARKS)
+  else
+    return nil
+  end
 end
 _2amodule_2a["mark"] = mark
 local function select(id)
@@ -58,8 +63,8 @@ end
 _2amodule_locals_2a["make-finder"] = make_finder
 local function telescope_delete_mark(prompt_bufnr)
   local confirmation = nvim.fn.input("Delete? [y/n]: ")
-  local _let_3_ = actions_state.get_selected_entry()
-  local index = _let_3_["index"]
+  local _let_4_ = actions_state.get_selected_entry()
+  local index = _let_4_["index"]
   if (string.len(confirmation) == 0) then
     return print("Didn't delete mark")
   else
@@ -74,12 +79,12 @@ local function telescope(opts)
   if a["empty?"](MARKS) then
     return print("No marks")
   else
-    local function _5_(_, map)
+    local function _6_(_, map)
       map("i", "<c-d>", telescope_delete_mark)
       map("n", "<c-d>", telescope_delete_mark)
       return true
     end
-    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), attach_mappings = _5_}):find()
+    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), attach_mappings = _6_}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

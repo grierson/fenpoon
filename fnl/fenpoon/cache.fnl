@@ -4,7 +4,10 @@
 
 (defn read
   []
-  (nvim.fn.json_decode (a.slurp cache)))
+  (let [marks (a.slurp cache)]
+    (if (a.empty? marks)
+        []
+        (nvim.fn.json_decode marks))))
 
 (defn write
   [marks]

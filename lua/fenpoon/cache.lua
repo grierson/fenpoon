@@ -16,7 +16,12 @@ _2amodule_locals_2a["nvim"] = nvim
 local cache = ((_2amodule_2a).cache or a.str(nvim.fn.stdpath("data"), "/fenpoon.json"))
 do end (_2amodule_2a)["cache"] = cache
 local function read()
-  return nvim.fn.json_decode(a.slurp(cache))
+  local marks = a.slurp(cache)
+  if a["empty?"](marks) then
+    return {}
+  else
+    return nvim.fn.json_decode(marks)
+  end
 end
 _2amodule_2a["read"] = read
 local function write(marks)

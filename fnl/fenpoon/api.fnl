@@ -26,9 +26,11 @@
 (defn mark
   []
   "Add file to marks"
-  (do
-    (core.add MARKS (file-path))
-    (cache.write MARKS)))
+  (let [file (file-path)]
+    (when (not (a.empty? file))
+      (do
+        (core.add MARKS file)
+        (cache.write MARKS)))))
 
 (defn select
   [id]
