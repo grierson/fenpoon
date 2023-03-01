@@ -37,7 +37,6 @@ List marks and view mark index
 :lua require("fenpoon.main").telescope()
 ```
 
-`<c-d>` on selection within Telescope will delete the mark
 
 ### Select a mark
 
@@ -58,13 +57,9 @@ o <cmd>:lua require("fenpoon.main").select(4)<CR>
 
 ### Delete mark
 
-Delete specific mark
+`<c-d>` on selection within Telescope will delete the mark
 
-```
-:lua require("fenpoon.main").delete(N)
-```
 
 ## TODO
 
-* Cache marks
 * Make marks project specific
