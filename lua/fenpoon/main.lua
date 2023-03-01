@@ -10,11 +10,12 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local a, actions_state, cache, core, nvim, pickers, themes = require("fenpoon.aniseed.core"), require("telescope.actions.state"), require("fenpoon.cache"), require("fenpoon.core"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("telescope.themes")
+local a, actions_state, cache, core, finders, nvim, pickers, themes = require("fenpoon.aniseed.core"), require("telescope.actions.state"), require("fenpoon.cache"), require("fenpoon.core"), require("telescope.finders"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("telescope.themes")
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["actions-state"] = actions_state
 _2amodule_locals_2a["cache"] = cache
 _2amodule_locals_2a["core"] = core
+_2amodule_locals_2a["finders"] = finders
 _2amodule_locals_2a["nvim"] = nvim
 _2amodule_locals_2a["pickers"] = pickers
 _2amodule_locals_2a["themes"] = themes

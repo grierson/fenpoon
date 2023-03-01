@@ -4,7 +4,8 @@
                                cache fenpoon.cache
                                themes telescope.themes
                                actions-state telescope.actions.state
-                               pickers telescope.pickers}})
+                               pickers telescope.pickers
+                               finders telescope.finders}})
 
 (var MARKS [])
 
