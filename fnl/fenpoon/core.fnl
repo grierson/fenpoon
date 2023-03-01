@@ -26,14 +26,14 @@
       (when (= id target-id)
         (lua "return v")))))
 
-(defn find-mark-index-by-id
+(defn- find-mark-index-by-id
   [marks target-id]
   "Find mark by id"
   (each [i {: id} (ipairs marks)]
     (when (= id target-id)
       (lua "return i"))))
 
-(defn next-id
+(defn- next-id
   [current-ids ?target]
   "Get next available id"
   (let [target (or ?target 1)]
@@ -46,14 +46,6 @@
   "Pretty print index with path"
   (str.join "\n" (icollect [i file (pairs marks)]
                    (a.str i " - " file))))
-
-;; Path
-
-(defn relative-path
-  [proj file]
-  "Remove project from file path"
-  (let [x (string.gsub file proj "")]
-    x))
 
 ;; Impure functions
 
@@ -72,6 +64,12 @@
     (table.remove marks mark-index)))
 
 ;; Telescope
+
+(defn- relative-path
+  [proj file]
+  "Remove project from file path"
+  (let [x (string.gsub file proj "")]
+    x))
 
 (defn entry-maker
   [{: id : file}]

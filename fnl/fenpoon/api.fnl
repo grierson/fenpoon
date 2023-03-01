@@ -1,11 +1,11 @@
-(module fenpoon.main {require {nvim aniseed.nvim
-                               a aniseed.core
-                               core fenpoon.core
-                               cache fenpoon.cache
-                               themes telescope.themes
-                               actions-state telescope.actions.state
-                               pickers telescope.pickers
-                               finders telescope.finders}})
+(module fenpoon.api {require {nvim aniseed.nvim
+                              a aniseed.core
+                              core fenpoon.core
+                              cache fenpoon.cache
+                              themes telescope.themes
+                              actions-state telescope.actions.state
+                              pickers telescope.pickers
+                              finders telescope.finders}})
 
 (var MARKS [])
 

@@ -69,7 +69,7 @@ local function find_mark_index_by_id(marks, target_id)
   end
   return nil
 end
-_2amodule_2a["find-mark-index-by-id"] = find_mark_index_by_id
+_2amodule_locals_2a["find-mark-index-by-id"] = find_mark_index_by_id
 local function next_id(current_ids, _3ftarget)
   local target = (_3ftarget or 1)
   if contains(current_ids, target) then
@@ -78,7 +78,7 @@ local function next_id(current_ids, _3ftarget)
     return target
   end
 end
-_2amodule_2a["next-id"] = next_id
+_2amodule_locals_2a["next-id"] = next_id
 local function print(marks)
   local function _15_()
     local tbl_17_auto = {}
@@ -96,11 +96,6 @@ local function print(marks)
   return str.join("\n", _15_())
 end
 _2amodule_2a["print"] = print
-local function relative_path(proj, file)
-  local x = string.gsub(file, proj, "")
-  return x
-end
-_2amodule_2a["relative-path"] = relative_path
 local function add(marks, file)
   if contains(get_files(marks), file) then
     return marks
@@ -115,6 +110,11 @@ local function remove(marks, id)
   return table.remove(marks, mark_index)
 end
 _2amodule_2a["remove"] = remove
+local function relative_path(proj, file)
+  local x = string.gsub(file, proj, "")
+  return x
+end
+_2amodule_locals_2a["relative-path"] = relative_path
 local function entry_maker(_18_)
   local _arg_19_ = _18_
   local id = _arg_19_["id"]

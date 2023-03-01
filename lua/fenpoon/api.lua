@@ -1,5 +1,5 @@
-local _2afile_2a = "fnl/fenpoon/main.fnl"
-local _2amodule_name_2a = "fenpoon.main"
+local _2afile_2a = "fnl/fenpoon/api.fnl"
+local _2amodule_name_2a = "fenpoon.api"
 local _2amodule_2a
 do
   package.loaded[_2amodule_name_2a] = {}
