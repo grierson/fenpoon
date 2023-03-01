@@ -93,7 +93,8 @@ local function print(marks)
 end
 _2amodule_2a["print"] = print
 local function relative_path(proj, file)
-  return string.gsub(file, proj, "")
+  local x = string.gsub(file, proj, "")
+  return x
 end
 _2amodule_2a["relative-path"] = relative_path
 local function add(marks, file)

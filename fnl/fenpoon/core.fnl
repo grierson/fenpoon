@@ -50,7 +50,8 @@
 (defn relative-path
   [proj file]
   "Remove project from file path"
-  (string.gsub file proj ""))
+  (let [x (string.gsub file proj "")]
+    x))
 
 ;; Impure functions
 
