@@ -26,7 +26,7 @@ Lazy
 Add a file to your marks
 
 ```
-:lua require("fenpoon.main").mark()
+:lua require("fenpoon.api").mark()
 ```
 
 ### Telescope
@@ -34,7 +34,7 @@ Add a file to your marks
 List marks and view mark index
 
 ```
-:lua require("fenpoon.main").telescope()
+:lua require("fenpoon.api").telescope()
 ```
 
 
@@ -43,16 +43,16 @@ List marks and view mark index
 Select a specific mark
 
 ```
-:lua require("fenpoon.main").select(N)
+:lua require("fenpoon.api").select(N)
 ```
 
 Usally map 1,2,3,4 to frequent keys
 
 ```
-n <cmd>:lua require("fenpoon.main").select(1)<CR>
-e <cmd>:lua require("fenpoon.main").select(2)<CR>
-i <cmd>:lua require("fenpoon.main").select(3)<CR>
-o <cmd>:lua require("fenpoon.main").select(4)<CR>
+n <cmd>:lua require("fenpoon.api").select(1)<CR>
+e <cmd>:lua require("fenpoon.api").select(2)<CR>
+i <cmd>:lua require("fenpoon.api").select(3)<CR>
+o <cmd>:lua require("fenpoon.api").select(4)<CR>
 ```
 
 ### Delete mark
