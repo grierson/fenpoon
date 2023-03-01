@@ -41,7 +41,7 @@
 
 ;; Telescope
 
-(defn make-finder
+(defn- make-finder
   [marks]
   (finders.new_table {:results marks :entry_maker core.entry-maker}))
 
@@ -55,8 +55,8 @@
         (do
           (core.remove MARKS index)
           (cache.write MARKS)
-          (local current-picker (actions-state.get_current_picker prompt-bufnr))
-          (current-picker:refresh (make-finder MARKS) {:reset_prompt true})))))
+          (let [current-picker (actions-state.get_current_picker prompt-bufnr)]
+            (current-picker:refresh (make-finder MARKS) {:reset_prompt true}))))))
 
 (defn telescope
   [opts]

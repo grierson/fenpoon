@@ -55,7 +55,7 @@ _2amodule_2a["select"] = select
 local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = core["entry-maker"]})
 end
-_2amodule_2a["make-finder"] = make_finder
+_2amodule_locals_2a["make-finder"] = make_finder
 local function telescope_delete_mark(prompt_bufnr)
   local confirmation = nvim.fn.input("Delete? [y/n]: ")
   local _let_3_ = actions_state.get_selected_entry()
