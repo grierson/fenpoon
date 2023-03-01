@@ -9,6 +9,8 @@
 
 ;; Domain
 
+(defn- project-path [] (vim.loop.cwd))
+
 (defn get-ids
   [marks]
   (a.map (fn [{: id}] id) marks))
@@ -68,3 +70,13 @@
   "!!!Mutates!!! Remove mark by id from marks"
   (let [mark-index (find-mark-index-by-id marks id)]
     (table.remove marks mark-index)))
+
+;; Telescope
+
+(defn entry-maker
+  [{: id : file}]
+  "Telescope list item options"
+  {:value file
+   :ordinal id
+   :display (a.str id " - " (relative-path (project-path) file))
+   :filename file})

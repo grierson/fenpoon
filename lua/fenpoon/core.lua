@@ -24,6 +24,10 @@ local function contains(coll, target)
   return a.some(_1_, coll)
 end
 _2amodule_2a["contains"] = contains
+local function project_path()
+  return vim.loop.cwd()
+end
+_2amodule_locals_2a["project-path"] = project_path
 local function get_ids(marks)
   local function _5_(_3_)
     local _arg_4_ = _3_
@@ -111,4 +115,11 @@ local function remove(marks, id)
   return table.remove(marks, mark_index)
 end
 _2amodule_2a["remove"] = remove
+local function entry_maker(_18_)
+  local _arg_19_ = _18_
+  local id = _arg_19_["id"]
+  local file = _arg_19_["file"]
+  return {value = file, ordinal = id, display = a.str(id, " - ", relative_path(project_path(), file)), filename = file}
+end
+_2amodule_2a["entry-maker"] = entry_maker
 return _2amodule_2a
