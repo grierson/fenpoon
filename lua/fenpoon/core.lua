@@ -24,10 +24,28 @@ local function contains(coll, target)
   return a.some(_1_, coll)
 end
 _2amodule_2a["contains"] = contains
-local function find_mark_by_id(coll, target_id)
-  for i, v in ipairs(coll) do
-    local _let_3_ = v
-    local id = _let_3_["id"]
+local function get_ids(marks)
+  local function _5_(_3_)
+    local _arg_4_ = _3_
+    local id = _arg_4_["id"]
+    return id
+  end
+  return a.map(_5_, marks)
+end
+_2amodule_2a["get-ids"] = get_ids
+local function get_files(marks)
+  local function _8_(_6_)
+    local _arg_7_ = _6_
+    local file = _arg_7_["file"]
+    return file
+  end
+  return a.map(_8_, marks)
+end
+_2amodule_2a["get-files"] = get_files
+local function find_mark_by_id(marks, target_id)
+  for i, v in ipairs(marks) do
+    local _let_9_ = v
+    local id = _let_9_["id"]
     if (id == target_id) then
       return v
     else
@@ -36,10 +54,10 @@ local function find_mark_by_id(coll, target_id)
   return nil
 end
 _2amodule_2a["find-mark-by-id"] = find_mark_by_id
-local function find_mark_index_by_id(coll, target_id)
-  for i, _5_ in ipairs(coll) do
-    local _each_6_ = _5_
-    local id = _each_6_["id"]
+local function find_mark_index_by_id(marks, target_id)
+  for i, _11_ in ipairs(marks) do
+    local _each_12_ = _11_
+    local id = _each_12_["id"]
     if (id == target_id) then
       return i
     else
@@ -57,33 +75,8 @@ local function next_id(current_ids, _3ftarget)
   end
 end
 _2amodule_2a["next-id"] = next_id
-local function add(marks, file)
-  local function _11_(_9_)
-    local _arg_10_ = _9_
-    local file0 = _arg_10_["file"]
-    return file0
-  end
-  if contains(a.map(_11_, marks), file) then
-    return marks
-  else
-    local id
-    local function _14_(_12_)
-      local _arg_13_ = _12_
-      local id0 = _arg_13_["id"]
-      return id0
-    end
-    id = next_id(a.map(_14_, marks))
-    return table.insert(marks, {id = id, file = file})
-  end
-end
-_2amodule_2a["add"] = add
-local function remove(marks, id)
-  local mark_index = find_mark_index_by_id(marks, id)
-  return table.remove(marks, mark_index)
-end
-_2amodule_2a["remove"] = remove
-local function list(marks)
-  local function _16_()
+local function print(marks)
+  local function _15_()
     local tbl_17_auto = {}
     local i_18_auto = #tbl_17_auto
     for i, file in pairs(marks) do
@@ -96,11 +89,25 @@ local function list(marks)
     end
     return tbl_17_auto
   end
-  return str.join("\n", _16_())
+  return str.join("\n", _15_())
 end
-_2amodule_2a["list"] = list
+_2amodule_2a["print"] = print
 local function relative_path(proj, file)
   return string.gsub(file, proj, "")
 end
 _2amodule_2a["relative-path"] = relative_path
+local function add(marks, file)
+  if contains(get_files(marks), file) then
+    return marks
+  else
+    local id = next_id(get_ids(marks))
+    return table.insert(marks, {id = id, file = file})
+  end
+end
+_2amodule_2a["add"] = add
+local function remove(marks, id)
+  local mark_index = find_mark_index_by_id(marks, id)
+  return table.remove(marks, mark_index)
+end
+_2amodule_2a["remove"] = remove
 return _2amodule_2a
