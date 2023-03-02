@@ -12,7 +12,7 @@
 
 ;; Helpers
 
-(defn init [] (set MARKS (cache.read)))
+(defn setup [] (set MARKS (cache.read)))
 (defn- file-path [] (nvim.buf_get_name 0))
 
 ;; Api
@@ -64,13 +64,11 @@
 (defn telescope
   [opts]
   "Open telescope to list marks"
-  (if (a.empty? MARKS)
-      (print "No marks")
-      (: (pickers.new (themes.get_dropdown)
-                      {:prompt_title :Fenpoon
-                       :finder (make-finder MARKS)
-                       :sorter (conf.values.generic_sorter opts)
-                       :attach_mappings (fn [_ map]
-                                          (map :i :<c-d> telescope-delete-mark)
-                                          (map :n :<c-d> telescope-delete-mark)
-                                          true)}) :find)))
+  (: (pickers.new (themes.get_dropdown)
+                  {:prompt_title :Fenpoon
+                   :finder (make-finder MARKS)
+                   :sorter (conf.values.generic_sorter opts)
+                   :attach_mappings (fn [_ map]
+                                      (map :i :<c-d> telescope-delete-mark)
+                                      (map :n :<c-d> telescope-delete-mark)
+                                      true)}) :find))

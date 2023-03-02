@@ -21,11 +21,11 @@ _2amodule_locals_2a["nvim"] = nvim
 _2amodule_locals_2a["pickers"] = pickers
 _2amodule_locals_2a["themes"] = themes
 local MARKS = {}
-local function init()
+local function setup()
   MARKS = cache.read()
   return nil
 end
-_2amodule_2a["init"] = init
+_2amodule_2a["setup"] = setup
 local function file_path()
   return nvim.buf_get_name(0)
 end
@@ -77,16 +77,12 @@ local function telescope_delete_mark(prompt_bufnr)
 end
 _2amodule_locals_2a["telescope-delete-mark"] = telescope_delete_mark
 local function telescope(opts)
-  if a["empty?"](MARKS) then
-    return print("No marks")
-  else
-    local function _6_(_, map)
-      map("i", "<c-d>", telescope_delete_mark)
-      map("n", "<c-d>", telescope_delete_mark)
-      return true
-    end
-    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), sorter = conf.values.generic_sorter(opts), attach_mappings = _6_}):find()
+  local function _6_(_, map)
+    map("i", "<c-d>", telescope_delete_mark)
+    map("n", "<c-d>", telescope_delete_mark)
+    return true
   end
+  return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), sorter = conf.values.generic_sorter(opts), attach_mappings = _6_}):find()
 end
 _2amodule_2a["telescope"] = telescope
 return _2amodule_2a

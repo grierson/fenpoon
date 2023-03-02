@@ -119,7 +119,7 @@ local function entry_maker(_18_)
   local _arg_19_ = _18_
   local id = _arg_19_["id"]
   local file = _arg_19_["file"]
-  return {value = file, ordinal = id, display = a.str(id, " - ", relative_path(project_path(), file)), filename = file}
+  return {value = file, ordinal = file, display = a.str(id, " - ", relative_path(project_path(), file)), filename = file}
 end
 _2amodule_2a["entry-maker"] = entry_maker
 return _2amodule_2a
