@@ -75,6 +75,6 @@
   [{: id : file}]
   "Telescope list item options"
   {:value file
-   :ordinal id
+   :ordinal file -- Should be id but can't order on number \_o_/?
    :display (a.str id " - " (relative-path (project-path) file))
    :filename file})

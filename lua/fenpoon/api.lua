@@ -10,10 +10,11 @@ do
   _2amodule_2a["aniseed/locals"] = {}
   _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
 end
-local a, actions_state, cache, core, finders, nvim, pickers, themes = require("fenpoon.aniseed.core"), require("telescope.actions.state"), require("fenpoon.cache"), require("fenpoon.core"), require("telescope.finders"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("telescope.themes")
+local a, actions_state, cache, conf, core, finders, nvim, pickers, themes = require("fenpoon.aniseed.core"), require("telescope.actions.state"), require("fenpoon.cache"), require("telescope.config"), require("fenpoon.core"), require("telescope.finders"), require("fenpoon.aniseed.nvim"), require("telescope.pickers"), require("telescope.themes")
 do end (_2amodule_locals_2a)["a"] = a
 _2amodule_locals_2a["actions-state"] = actions_state
 _2amodule_locals_2a["cache"] = cache
+_2amodule_locals_2a["conf"] = conf
 _2amodule_locals_2a["core"] = core
 _2amodule_locals_2a["finders"] = finders
 _2amodule_locals_2a["nvim"] = nvim
@@ -84,7 +85,7 @@ local function telescope(opts)
       map("n", "<c-d>", telescope_delete_mark)
       return true
     end
-    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), attach_mappings = _6_}):find()
+    return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), sorter = conf.values.generic_sorter(opts), attach_mappings = _6_}):find()
   end
 end
 _2amodule_2a["telescope"] = telescope

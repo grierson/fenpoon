@@ -5,7 +5,8 @@
                               themes telescope.themes
                               actions-state telescope.actions.state
                               pickers telescope.pickers
-                              finders telescope.finders}})
+                              finders telescope.finders
+                              conf telescope.config}})
 
 (var MARKS [])
 
@@ -68,6 +69,7 @@
       (: (pickers.new (themes.get_dropdown)
                       {:prompt_title :Fenpoon
                        :finder (make-finder MARKS)
+                       :sorter (conf.values.generic_sorter opts)
                        :attach_mappings (fn [_ map]
                                           (map :i :<c-d> telescope-delete-mark)
                                           (map :n :<c-d> telescope-delete-mark)
