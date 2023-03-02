@@ -76,7 +76,7 @@ local function telescope_delete_mark(prompt_bufnr)
   end
 end
 _2amodule_locals_2a["telescope-delete-mark"] = telescope_delete_mark
-local function telescope(opts)
+local function list(opts)
   local function _6_(_, map)
     map("i", "<c-d>", telescope_delete_mark)
     map("n", "<c-d>", telescope_delete_mark)
@@ -84,5 +84,5 @@ local function telescope(opts)
   end
   return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), sorter = conf.values.generic_sorter(opts), attach_mappings = _6_}):find()
 end
-_2amodule_2a["telescope"] = telescope
+_2amodule_2a["list"] = list
 return _2amodule_2a

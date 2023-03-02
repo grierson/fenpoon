@@ -34,7 +34,10 @@ Add a file to your marks
 List marks and view mark index
 
 ```
-:lua require("fenpoon.api").telescope()
+:Telescope fenpoon
+OR
+:lua require("fenpoon.api").list()
+```
 ```
 
 

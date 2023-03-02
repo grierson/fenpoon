@@ -61,7 +61,7 @@
           (let [current-picker (actions-state.get_current_picker prompt-bufnr)]
             (current-picker:refresh (make-finder MARKS) {:reset_prompt true}))))))
 
-(defn telescope
+(defn list
   [opts]
   "Open telescope to list marks"
   (: (pickers.new (themes.get_dropdown)
