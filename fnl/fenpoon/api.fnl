@@ -1,68 +1,63 @@
-(module fenpoon.api {require {nvim aniseed.nvim
-                              a aniseed.core
-                              core fenpoon.core
-                              cache fenpoon.cache
-                              themes telescope.themes
-                              actions-state telescope.actions.state
-                              pickers telescope.pickers
-                              finders telescope.finders
-                              conf telescope.config}})
+(local {: autoload} (require :nfnl.module))
+(local core (autoload :nfnl.core))
+(local nvim (autoload :nfnl.nvim))
+(local fenpoon (autoload :fenpoon.core))
+(local cache (autoload :fenpoon.cache))
+(local themes (autoload :telescope.themes))
+(local actions-state (autoload :telescope.actions.state))
+(local pickers (autoload :telescope.pickers))
+(local finders (autoload :telescope.finders))
+(local conf (autoload :telescope.config))
 
 (var MARKS [])
 
 ;; Helpers
 
-(defn setup [] (set MARKS (cache.read)))
-(defn- file-path [] (nvim.buf_get_name 0))
+(fn setup [] (set MARKS (cache.read)))
+(fn file-path [] (nvim.buf_get_name 0))
 
 ;; Api
 
-(defn debug
-  []
+(fn debug []
   "Debugging - print marked files"
-  (if (a.empty? MARKS)
+  (if (core.empty? MARKS)
       (print "No marks")
-      (print (core.print MARKS))))
+      (print (fenpoon.print MARKS))))
 
-(defn mark
-  []
+(fn mark []
   "Add file to marks"
   (let [file (file-path)]
-    (when (not (a.empty? file))
+    (when (not (core.empty? file))
       (do
-        (core.add MARKS file)
+        (fenpoon.add MARKS file)
         (cache.write MARKS)))))
 
-(defn select
-  [id]
+(fn select [id]
   "Use id to switch to buffer"
-  (if (core.contains (core.get-ids) id)
-      (let [file (a.get (core.find-mark-by-id MARKS id) :file)
+  (if (fenpoon.contains (fenpoon.get-ids MARKS) id)
+      (let [file (core.get (fenpoon.find-mark-by-id MARKS id) :file)
             bufid (nvim.fn.bufadd file)]
         (nvim.set_current_buf bufid))
-      (print (a.str "No " id " mark"))))
+      (print (core.str "No " id " mark"))))
 
 ;; Telescope
 
-(defn- make-finder
-  [marks]
-  (finders.new_table {:results marks :entry_maker core.entry-maker}))
+(fn make-finder [marks]
+  (finders.new_table {:results marks :entry_maker fenpoon.entry-maker}))
 
-(defn- telescope-delete-mark
-  [prompt-bufnr]
+(fn telescope-delete-mark [prompt-bufnr]
   "Delete mark prompt"
   (let [confirmation (nvim.fn.input "Delete? [y/n]: ")
         {: index} (actions-state.get_selected_entry)]
     (if (= (string.len confirmation) 0)
         (print "Didn't delete mark")
         (do
-          (core.remove MARKS index)
+          (fenpoon.remove MARKS index)
           (cache.write MARKS)
           (let [current-picker (actions-state.get_current_picker prompt-bufnr)]
             (current-picker:refresh (make-finder MARKS) {:reset_prompt true}))))))
 
-(defn list
-  [opts]
+(fn list [opts]
   "Open telescope to list marks"
   (: (pickers.new (themes.get_dropdown)
                   {:prompt_title :Fenpoon

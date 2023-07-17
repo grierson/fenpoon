@@ -1,14 +1,14 @@
-(module fenpoon.cache {require {nvim aniseed.nvim a aniseed.core}})
+(local {: autoload} (require :nfnl.module))
+(local core (autoload :nfnl.core))
+(local nvim (autoload :nfnl.nvim))
 
-(defonce cache (a.str (nvim.fn.stdpath :data) :/fenpoon.json))
+(var cache (core.str (nvim.fn.stdpath :data) :/fenpoon.json))
 
-(defn read
-  []
-  (let [marks (a.slurp cache)]
-    (if (a.empty? marks)
+(fn read []
+  (let [marks (core.slurp cache)]
+    (if (core.empty? marks)
         []
         (nvim.fn.json_decode marks))))
 
-(defn write
-  [marks]
-  (a.spit cache (nvim.fn.json_encode marks)))
+(fn write [marks]
+  (core.spit cache (nvim.fn.json_encode marks)))

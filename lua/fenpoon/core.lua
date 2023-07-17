@@ -1,55 +1,41 @@
-local _2afile_2a = "fnl/fenpoon/core.fnl"
-local _2amodule_name_2a = "fenpoon.core"
-local _2amodule_2a
-do
-  package.loaded[_2amodule_name_2a] = {}
-  _2amodule_2a = package.loaded[_2amodule_name_2a]
-end
-local _2amodule_locals_2a
-do
-  _2amodule_2a["aniseed/locals"] = {}
-  _2amodule_locals_2a = (_2amodule_2a)["aniseed/locals"]
-end
-local a, str = require("fenpoon.aniseed.core"), require("fenpoon.aniseed.string")
-do end (_2amodule_locals_2a)["a"] = a
-_2amodule_locals_2a["str"] = str
+-- [nfnl] Compiled from fnl/fenpoon/core.fnl by https://github.com/Olical/nfnl, do not edit.
+local _local_1_ = require("nfnl.module")
+local autoload = _local_1_["autoload"]
+local core = autoload("nfnl.core")
+local str = autoload("nfnl.string")
 local function contains(coll, target)
-  local function _1_(v)
+  local function _2_(v)
     if (v == target) then
       return v
     else
       return nil
     end
   end
-  return a.some(_1_, coll)
+  return core.some(_2_, coll)
 end
-_2amodule_2a["contains"] = contains
 local function project_path()
   return vim.loop.cwd()
 end
-_2amodule_locals_2a["project-path"] = project_path
 local function get_ids(marks)
-  local function _5_(_3_)
-    local _arg_4_ = _3_
-    local id = _arg_4_["id"]
+  local function _6_(_4_)
+    local _arg_5_ = _4_
+    local id = _arg_5_["id"]
     return id
   end
-  return a.map(_5_, marks)
+  return core.map(_6_, marks)
 end
-_2amodule_2a["get-ids"] = get_ids
 local function get_files(marks)
-  local function _8_(_6_)
-    local _arg_7_ = _6_
-    local file = _arg_7_["file"]
+  local function _9_(_7_)
+    local _arg_8_ = _7_
+    local file = _arg_8_["file"]
     return file
   end
-  return a.map(_8_, marks)
+  return core.map(_9_, marks)
 end
-_2amodule_2a["get-files"] = get_files
 local function find_mark_by_id(marks, target_id)
   for i, v in ipairs(marks) do
-    local _let_9_ = v
-    local id = _let_9_["id"]
+    local _let_10_ = v
+    local id = _let_10_["id"]
     if (id == target_id) then
       return v
     else
@@ -57,11 +43,10 @@ local function find_mark_by_id(marks, target_id)
   end
   return nil
 end
-_2amodule_2a["find-mark-by-id"] = find_mark_by_id
 local function find_mark_index_by_id(marks, target_id)
-  for i, _11_ in ipairs(marks) do
-    local _each_12_ = _11_
-    local id = _each_12_["id"]
+  for i, _12_ in ipairs(marks) do
+    local _each_13_ = _12_
+    local id = _each_13_["id"]
     if (id == target_id) then
       return i
     else
@@ -69,33 +54,30 @@ local function find_mark_index_by_id(marks, target_id)
   end
   return nil
 end
-_2amodule_locals_2a["find-mark-index-by-id"] = find_mark_index_by_id
 local function next_id(current_ids, _3ftarget)
   local target = (_3ftarget or 1)
   if contains(current_ids, target) then
-    return next_id(current_ids, a.inc(target))
+    return next_id(current_ids, core.inc(target))
   else
     return target
   end
 end
-_2amodule_locals_2a["next-id"] = next_id
 local function print(marks)
-  local function _15_()
-    local tbl_17_auto = {}
-    local i_18_auto = #tbl_17_auto
+  local function _16_()
+    local tbl_91_auto = {}
+    local i_92_auto = #tbl_91_auto
     for i, file in pairs(marks) do
-      local val_19_auto = a.str(i, " - ", file)
-      if (nil ~= val_19_auto) then
-        i_18_auto = (i_18_auto + 1)
-        do end (tbl_17_auto)[i_18_auto] = val_19_auto
+      local val_93_auto = core.str(i, " - ", file)
+      if (nil ~= val_93_auto) then
+        i_92_auto = (i_92_auto + 1)
+        do end (tbl_91_auto)[i_92_auto] = val_93_auto
       else
       end
     end
-    return tbl_17_auto
+    return tbl_91_auto
   end
-  return str.join("\n", _15_())
+  return str.join("\n", _16_())
 end
-_2amodule_2a["print"] = print
 local function add(marks, file)
   if contains(get_files(marks), file) then
     return marks
@@ -104,22 +86,18 @@ local function add(marks, file)
     return table.insert(marks, {id = id, file = file})
   end
 end
-_2amodule_2a["add"] = add
 local function remove(marks, id)
   local mark_index = find_mark_index_by_id(marks, id)
   return table.remove(marks, mark_index)
 end
-_2amodule_2a["remove"] = remove
 local function relative_path(proj, file)
   local x = string.gsub(file, proj, "")
   return x
 end
-_2amodule_locals_2a["relative-path"] = relative_path
-local function entry_maker(_18_)
-  local _arg_19_ = _18_
-  local id = _arg_19_["id"]
-  local file = _arg_19_["file"]
-  return {value = file, ordinal = file, display = a.str(id, " - ", relative_path(project_path(), file)), filename = file}
+local function entry_maker(_19_)
+  local _arg_20_ = _19_
+  local id = _arg_20_["id"]
+  local file = _arg_20_["file"]
+  return {value = file, ordinal = file, display = core.str(id, " - ", relative_path(project_path(), file)), filename = file}
 end
-_2amodule_2a["entry-maker"] = entry_maker
-return _2amodule_2a
+return entry_maker
