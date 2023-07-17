@@ -15,7 +15,8 @@ No use [ThePrimeagen/harpoon](https://github.com/ThePrimeagen/harpoon)
 ## Setup
 
 Lazy
-```
+
+```plaintext
 "grierson/fenpoon"
 ```
 
@@ -25,7 +26,7 @@ Lazy
 
 Add a file to your marks
 
-```
+```vim
 :lua require("fenpoon.api").mark()
 ```
 
@@ -33,25 +34,23 @@ Add a file to your marks
 
 List marks and view mark index
 
-```
+```vim
 :Telescope fenpoon
 OR
 :lua require("fenpoon.api").list()
 ```
-```
-
 
 ### Select a mark
 
 Select a specific mark
 
-```
+```vim
 :lua require("fenpoon.api").select(N)
 ```
 
 Usally map 1,2,3,4 to frequent keys
 
-```
+```vim
 n <cmd>:lua require("fenpoon.api").select(1)<CR>
 e <cmd>:lua require("fenpoon.api").select(2)<CR>
 i <cmd>:lua require("fenpoon.api").select(3)<CR>
@@ -61,7 +60,6 @@ o <cmd>:lua require("fenpoon.api").select(4)<CR>
 ### Delete mark
 
 `<c-d>` on selection within Telescope will delete the mark
-
 
 ## TODO
 
