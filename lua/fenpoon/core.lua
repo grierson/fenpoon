@@ -54,6 +54,17 @@ local function find_mark_index_by_id(marks, target_id)
   end
   return nil
 end
+for i, _15_ in ipairs({{id = 3}, {id = 4}}) do
+  local _each_16_ = _15_
+  local id = _each_16_["id"]
+  print(i)
+end
+ipairs({{a = 1}, {b = 2}, {c = 3}})
+for i, _17_ in core["kv-pairs"]({{a = 1}, {b = 2}, {c = 3}}) do
+  local _each_18_ = _17_
+  local id = _each_18_["id"]
+  print(i)
+end
 local function next_id(current_ids, _3ftarget)
   local target = (_3ftarget or 1)
   if contains(current_ids, target) then
@@ -63,20 +74,20 @@ local function next_id(current_ids, _3ftarget)
   end
 end
 local function print(marks)
-  local function _16_()
-    local tbl_91_auto = {}
-    local i_92_auto = #tbl_91_auto
+  local function _20_()
+    local tbl_17_auto = {}
+    local i_18_auto = #tbl_17_auto
     for i, file in pairs(marks) do
-      local val_93_auto = core.str(i, " - ", file)
-      if (nil ~= val_93_auto) then
-        i_92_auto = (i_92_auto + 1)
-        do end (tbl_91_auto)[i_92_auto] = val_93_auto
+      local val_19_auto = core.str(i, " - ", file)
+      if (nil ~= val_19_auto) then
+        i_18_auto = (i_18_auto + 1)
+        do end (tbl_17_auto)[i_18_auto] = val_19_auto
       else
       end
     end
-    return tbl_91_auto
+    return tbl_17_auto
   end
-  return str.join("\n", _16_())
+  return str.join("\n", _20_())
 end
 local function add(marks, file)
   if contains(get_files(marks), file) then
@@ -91,13 +102,12 @@ local function remove(marks, id)
   return table.remove(marks, mark_index)
 end
 local function relative_path(proj, file)
-  local x = string.gsub(file, proj, "")
-  return x
+  return core.second(str.split(proj, file))
 end
-local function entry_maker(_19_)
-  local _arg_20_ = _19_
-  local id = _arg_20_["id"]
-  local file = _arg_20_["file"]
-  return {value = file, ordinal = file, display = core.str(id, " - ", relative_path(project_path(), file)), filename = file}
+local function entry_maker(_23_)
+  local _arg_24_ = _23_
+  local id = _arg_24_["id"]
+  local file = _arg_24_["file"]
+  return {value = file, ordinal = file, display = (id .. " - " .. relative_path(project_path(), file)), filename = file}
 end
 return entry_maker

@@ -1,3 +1,3 @@
 if has("nvim")
-  lua require("fenpoon.api").setup()
+  lua require("fenpoon.api").init()
 endif

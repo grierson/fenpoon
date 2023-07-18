@@ -2,7 +2,6 @@
 local _local_1_ = require("nfnl.module")
 local autoload = _local_1_["autoload"]
 local core = autoload("nfnl.core")
-local nvim = autoload("nfnl.nvim")
 local fenpoon = autoload("fenpoon.core")
 local cache = autoload("fenpoon.cache")
 local themes = autoload("telescope.themes")
@@ -10,13 +9,14 @@ local actions_state = autoload("telescope.actions.state")
 local pickers = autoload("telescope.pickers")
 local finders = autoload("telescope.finders")
 local conf = autoload("telescope.config")
+local mod = {}
 local MARKS = {}
-local function setup()
+mod.init = function()
   MARKS = cache.read()
   return nil
 end
 local function file_path()
-  return nvim.buf_get_name(0)
+  return vim.api.nvim_buf_get_name(0)
 end
 local function debug()
   if core["empty?"](MARKS) then
@@ -37,8 +37,8 @@ end
 local function select(id)
   if fenpoon.contains(fenpoon["get-ids"](MARKS), id) then
     local file = core.get(fenpoon["find-mark-by-id"](MARKS, id), "file")
-    local bufid = nvim.fn.bufadd(file)
-    return nvim.set_current_buf(bufid)
+    local bufid = vim.api.bufadd(file)
+    return vim.api.set_current_buf(bufid)
   else
     return print(core.str("No ", id, " mark"))
   end
@@ -47,7 +47,7 @@ local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = fenpoon["entry-maker"]})
 end
 local function telescope_delete_mark(prompt_bufnr)
-  local confirmation = nvim.fn.input("Delete? [y/n]: ")
+  local confirmation = vim.fn.input("Delete? [y/n]: ")
   local _let_5_ = actions_state.get_selected_entry()
   local index = _let_5_["index"]
   if (string.len(confirmation) == 0) then
@@ -67,4 +67,4 @@ local function list(opts)
   end
   return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(MARKS), sorter = conf.values.generic_sorter(opts), attach_mappings = _7_}):find()
 end
-return list
+return mod

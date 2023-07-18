@@ -1,6 +1,5 @@
 (local {: autoload} (require :nfnl.module))
 (local core (autoload :nfnl.core))
-(local nvim (autoload :nfnl.nvim))
 (local fenpoon (autoload :fenpoon.core))
 (local cache (autoload :fenpoon.cache))
 (local themes (autoload :telescope.themes))
@@ -9,12 +8,14 @@
 (local finders (autoload :telescope.finders))
 (local conf (autoload :telescope.config))
 
+(local mod {})
+
 (var MARKS [])
 
 ;; Helpers
 
-(fn setup [] (set MARKS (cache.read)))
-(fn file-path [] (nvim.buf_get_name 0))
+(fn mod.init [] (set MARKS (cache.read)))
+(fn file-path [] (vim.api.nvim_buf_get_name 0))
 
 ;; Api
 
@@ -36,8 +37,8 @@
   "Use id to switch to buffer"
   (if (fenpoon.contains (fenpoon.get-ids MARKS) id)
       (let [file (core.get (fenpoon.find-mark-by-id MARKS id) :file)
-            bufid (nvim.fn.bufadd file)]
-        (nvim.set_current_buf bufid))
+            bufid (vim.api.bufadd file)]
+        (vim.api.set_current_buf bufid))
       (print (core.str "No " id " mark"))))
 
 ;; Telescope
@@ -47,7 +48,7 @@
 
 (fn telescope-delete-mark [prompt-bufnr]
   "Delete mark prompt"
-  (let [confirmation (nvim.fn.input "Delete? [y/n]: ")
+  (let [confirmation (vim.fn.input "Delete? [y/n]: ")
         {: index} (actions-state.get_selected_entry)]
     (if (= (string.len confirmation) 0)
         (print "Didn't delete mark")
@@ -67,3 +68,5 @@
                                       (map :i :<c-d> telescope-delete-mark)
                                       (map :n :<c-d> telescope-delete-mark)
                                       true)}) :find))
+
+mod

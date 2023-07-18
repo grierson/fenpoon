@@ -13,22 +13,33 @@
 (fn project-path [] (vim.loop.cwd))
 
 (fn get-ids [marks]
+  "[{:id 1} {:id 2}] => [1 2]"
   (core.map (fn [{: id}] id) marks))
 
 (fn get-files [marks]
+  "[{:files 1} {:files 2}] => [1 2]"
   (core.map (fn [{: file}] file) marks))
 
 (fn find-mark-by-id [marks target-id]
+  "[{:id 1} {:id 2}] 1 => {:id 1}"
   (each [i v (ipairs marks)]
     (let [{: id} v]
       (when (= id target-id)
         (lua "return v")))))
 
 (fn find-mark-index-by-id [marks target-id]
-  "Find mark by id"
+  "[{:id 3} {:id 4}] 1 => {:id 3}"
   (each [i {: id} (ipairs marks)]
     (when (= id target-id)
       (lua "return i"))))
+
+(each [i {: id} (ipairs [{:id 3} {:id 4}])]
+  (print i))
+
+(ipairs {1 {:a 1} 2 {:b 2} 3 {:c 3}})
+
+(each [i {: id} (core.kv-pairs [{:a 1} {:b 2} {:c 3}])]
+  (print i))
 
 (fn next-id [current-ids ?target]
   "Get next available id"
@@ -60,12 +71,11 @@
 
 (fn relative-path [proj file]
   "Remove project from file path"
-  (let [x (string.gsub file proj "")]
-    x))
+  (core.second (str.split proj file)))
 
 (fn entry-maker [{: id : file}]
   "Telescope list item options"
   {:value file
    :ordinal file
-   :display (core.str id " - " (relative-path (project-path) file))
+   :display (.. id " - " (relative-path (project-path) file))
    :filename file})
