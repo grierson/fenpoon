@@ -1,6 +1,5 @@
-(local {: autoload} (require :nfnl.module))
-(local core (autoload :nfnl.core))
-(local str (autoload :nfnl.string))
+(local core (require :nfnl.core))
+(local str (require :nfnl.string))
 
 ;; Generic
 
@@ -32,14 +31,6 @@
   (each [i {: id} (ipairs marks)]
     (when (= id target-id)
       (lua "return i"))))
-
-(each [i {: id} (ipairs [{:id 3} {:id 4}])]
-  (print i))
-
-(ipairs {1 {:a 1} 2 {:b 2} 3 {:c 3}})
-
-(each [i {: id} (core.kv-pairs [{:a 1} {:b 2} {:c 3}])]
-  (print i))
 
 (fn next-id [current-ids ?target]
   "Get next available id"
@@ -79,3 +70,5 @@
    :ordinal file
    :display (.. id " - " (relative-path (project-path) file))
    :filename file})
+
+{: find-mark-by-id : contains}

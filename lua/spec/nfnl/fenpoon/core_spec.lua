@@ -3,16 +3,18 @@ local _local_1_ = require("plenary.busted")
 local describe = _local_1_["describe"]
 local it = _local_1_["it"]
 local assert = require("luassert.assert")
-local fenpoon = require("fenpoon.core")
+local core = require("fenpoon.core")
+core["find-mark-by-id"]({{id = 1}, {id = 2}}, 1)
 local function _2_()
   local function _3_()
-    local state = {}
-    local file = "proj/foo/bar.fnl"
-    local expected = {{id = 1, file = file}}
-    fenpoon.add(state, file)
-    fenpoon.add(state, file)
-    return assert.are.same(expected, state, "Files isn't twice")
+    assert.are.same(core.contains({1, 2, 3}, 1), 1)
+    return assert.are.same(core.contains({1, 2, 3}, 2), 2)
   end
-  return it("same file isn't added twice", _3_)
+  it("list contains value", _3_)
+  local function _4_()
+    assert.is_nil(core.contains({1, 2, 3}, 0))
+    return assert.is_nil(core.contains({1, 2, 3}, 4), 2)
+  end
+  return it("list doesn't contains value", _4_)
 end
-return describe("add-idempotent-test", _2_)
+return describe("contains test", _2_)

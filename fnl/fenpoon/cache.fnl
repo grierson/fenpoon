@@ -1,5 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local core (autoload :nfnl.core))
+(local core (require :nfnl.core))
 
 (var cache (.. (vim.fn.stdpath :data) :/fenpoon.json))
 

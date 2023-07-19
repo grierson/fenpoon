@@ -1,17 +1,30 @@
 (local {: describe : it} (require :plenary.busted))
 (local assert (require :luassert.assert))
-(local fenpoon (require :fenpoon.core))
+(local core (require :fenpoon.core))
 
-(describe :add-idempotent-test
+(core.find-mark-by-id [{:id 1} {:id 2}] 1)
+
+(describe "contains test"
           (fn []
-            (it "same file isn't added twice"
+            (it "list contains value"
                 (fn []
-                  (let [state []
-                        file :proj/foo/bar.fnl
-                        expected [{:id 1 : file}]]
-                    (fenpoon.add state file)
-                    (fenpoon.add state file)
-                    (assert.are.same expected state "Files isn't twice"))))))
+                  (assert.are.same (core.contains [1 2 3] 1) 1)
+                  (assert.are.same (core.contains [1 2 3] 2) 2)))
+            (it "list doesn't contains value"
+                (fn []
+                  (assert.is_nil (core.contains [1 2 3] 0))
+                  (assert.is_nil (core.contains [1 2 3] 4) 2)))))
+
+; (describe :add-idempotent-test
+;           (fn []
+;             (it "same file isn't added twice"
+;                 (fn []
+;                   (let [state []
+;                         file :proj/foo/bar.fnl
+;                         expected [{:id 1 : file}]]
+;                     (fenpoon.add state file)
+;                     (fenpoon.add state file)
+;                     (assert.are.same expected state "Files isn't twice"))))))
 
 ; (describe :add-second-mark-test
 ;           (let [state []

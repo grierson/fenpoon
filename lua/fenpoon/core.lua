@@ -1,41 +1,39 @@
 -- [nfnl] Compiled from fnl/fenpoon/core.fnl by https://github.com/Olical/nfnl, do not edit.
-local _local_1_ = require("nfnl.module")
-local autoload = _local_1_["autoload"]
-local core = autoload("nfnl.core")
-local str = autoload("nfnl.string")
+local core = require("nfnl.core")
+local str = require("nfnl.string")
 local function contains(coll, target)
-  local function _2_(v)
+  local function _1_(v)
     if (v == target) then
       return v
     else
       return nil
     end
   end
-  return core.some(_2_, coll)
+  return core.some(_1_, coll)
 end
 local function project_path()
   return vim.loop.cwd()
 end
 local function get_ids(marks)
-  local function _6_(_4_)
-    local _arg_5_ = _4_
-    local id = _arg_5_["id"]
+  local function _5_(_3_)
+    local _arg_4_ = _3_
+    local id = _arg_4_["id"]
     return id
   end
-  return core.map(_6_, marks)
+  return core.map(_5_, marks)
 end
 local function get_files(marks)
-  local function _9_(_7_)
-    local _arg_8_ = _7_
-    local file = _arg_8_["file"]
+  local function _8_(_6_)
+    local _arg_7_ = _6_
+    local file = _arg_7_["file"]
     return file
   end
-  return core.map(_9_, marks)
+  return core.map(_8_, marks)
 end
 local function find_mark_by_id(marks, target_id)
   for i, v in ipairs(marks) do
-    local _let_10_ = v
-    local id = _let_10_["id"]
+    local _let_9_ = v
+    local id = _let_9_["id"]
     if (id == target_id) then
       return v
     else
@@ -44,26 +42,15 @@ local function find_mark_by_id(marks, target_id)
   return nil
 end
 local function find_mark_index_by_id(marks, target_id)
-  for i, _12_ in ipairs(marks) do
-    local _each_13_ = _12_
-    local id = _each_13_["id"]
+  for i, _11_ in ipairs(marks) do
+    local _each_12_ = _11_
+    local id = _each_12_["id"]
     if (id == target_id) then
       return i
     else
     end
   end
   return nil
-end
-for i, _15_ in ipairs({{id = 3}, {id = 4}}) do
-  local _each_16_ = _15_
-  local id = _each_16_["id"]
-  print(i)
-end
-ipairs({{a = 1}, {b = 2}, {c = 3}})
-for i, _17_ in core["kv-pairs"]({{a = 1}, {b = 2}, {c = 3}}) do
-  local _each_18_ = _17_
-  local id = _each_18_["id"]
-  print(i)
 end
 local function next_id(current_ids, _3ftarget)
   local target = (_3ftarget or 1)
@@ -74,7 +61,7 @@ local function next_id(current_ids, _3ftarget)
   end
 end
 local function print(marks)
-  local function _20_()
+  local function _15_()
     local tbl_17_auto = {}
     local i_18_auto = #tbl_17_auto
     for i, file in pairs(marks) do
@@ -87,7 +74,7 @@ local function print(marks)
     end
     return tbl_17_auto
   end
-  return str.join("\n", _20_())
+  return str.join("\n", _15_())
 end
 local function add(marks, file)
   if contains(get_files(marks), file) then
@@ -104,10 +91,10 @@ end
 local function relative_path(proj, file)
   return core.second(str.split(proj, file))
 end
-local function entry_maker(_23_)
-  local _arg_24_ = _23_
-  local id = _arg_24_["id"]
-  local file = _arg_24_["file"]
+local function entry_maker(_18_)
+  local _arg_19_ = _18_
+  local id = _arg_19_["id"]
+  local file = _arg_19_["file"]
   return {value = file, ordinal = file, display = (id .. " - " .. relative_path(project_path(), file)), filename = file}
 end
-return entry_maker
+return {["find-mark-by-id"] = find_mark_by_id, contains = contains}
