@@ -84,6 +84,7 @@ local function add(marks, file)
     return table.insert(marks, {id = id, file = file})
   end
 end
+add({{id = 1, file = "a"}}, "b")
 local function remove(marks, id)
   local mark_index = find_mark_index_by_id(marks, id)
   return table.remove(marks, mark_index)
@@ -97,4 +98,4 @@ local function entry_maker(_18_)
   local file = _arg_19_["file"]
   return {value = file, ordinal = file, display = (id .. " - " .. relative_path(project_path(), file)), filename = file}
 end
-return {["find-mark-by-id"] = find_mark_by_id, contains = contains}
+return {["find-mark-by-id"] = find_mark_by_id, contains = contains, ["get-ids"] = get_ids, ["get-files"] = get_files, ["find-mark-index-by-id"] = find_mark_index_by_id, ["next-id"] = next_id, add = add, remove = remove}

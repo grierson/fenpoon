@@ -53,6 +53,8 @@
       (let [id (next-id (get-ids marks))]
         (table.insert marks {: id : file}))))
 
+(add [{:id 1 :file :a}] :b)
+
 (fn remove [marks id]
   "!!!Mutates!!! Remove mark by id from marks"
   (let [mark-index (find-mark-index-by-id marks id)]
@@ -71,4 +73,12 @@
    :display (.. id " - " (relative-path (project-path) file))
    :filename file})
 
-{: find-mark-by-id : contains}
+{: find-mark-by-id
+ : contains
+ : get-ids
+ : get-files
+ : find-mark-by-id
+ : find-mark-index-by-id
+ : next-id
+ : add
+ : remove}
