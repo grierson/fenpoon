@@ -2,14 +2,13 @@
 (local assert (require :luassert.assert))
 (local core (require :fenpoon.core))
 
-(core.find-mark-by-id [{:id 1} {:id 2}] 1)
-
 (describe "contains test"
           (fn []
             (it "list contains value"
                 (fn []
                   (assert.are.same (core.contains [1 2 3] 1) 1)
-                  (assert.are.same (core.contains [1 2 3] 2) 2)))
+                  (assert.are.same (core.contains [1 2 3] 2) 2)
+                  (assert.are.same (core.contains [:a :b :c] :a) :a)))
             (it "list doesn't contains value"
                 (fn []
                   (assert.is_nil (core.contains [1 2 3] 0))
