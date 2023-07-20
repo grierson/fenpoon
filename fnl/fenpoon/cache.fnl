@@ -1,12 +1,16 @@
-(local core (require :nfnl.core))
+(local nfnl (require :nfnl.core))
 
-(var cache (.. (vim.fn.stdpath :data) :/fenpoon.json))
+(local cache (.. (vim.fn.stdpath :data) :/fenpoon.json))
 
 (fn read []
-  (let [marks (core.slurp cache)]
-    (if (core.empty? marks)
+  (let [marks (nfnl.slurp cache)]
+    (if (nfnl.empty? marks)
         []
         (vim.fn.json_decode marks))))
 
 (fn write [marks]
-  (core.spit cache (vim.fn.json_encode marks)))
+  (do
+    (nfnl.spit cache (vim.fn.json_encode marks))
+    (read)))
+
+{: read : write : cache}

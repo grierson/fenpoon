@@ -1,4 +1,4 @@
-(local core (require :nfnl.core))
+(local nfnl (require :nfnl.core))
 (local fenpoon (require :fenpoon.core))
 (local cache (require :fenpoon.cache))
 (local themes (require :telescope.themes))
@@ -7,38 +7,36 @@
 (local finders (require :telescope.finders))
 (local conf (require :telescope.config))
 
-(local mod {})
-
-(var MARKS [])
-
 ;; Helpers
 
-(fn mod.init [] (set MARKS (cache.read)))
 (fn file-path [] (vim.api.nvim_buf_get_name 0))
 
 ;; Api
 
 (fn debug []
   "Debugging - print marked files"
-  (if (core.empty? MARKS)
-      (print "No marks")
-      (print (fenpoon.print MARKS))))
+  (let [marks (cache.read)]
+    (if (nfnl.empty? marks)
+        (print "No marks")
+        (print (nfnl.str marks)))))
 
 (fn mark []
   "Add file to marks"
   (let [file (file-path)]
-    (when (not (core.empty? file))
-      (do
-        (fenpoon.add MARKS file)
-        (cache.write MARKS)))))
+    (when (not (nfnl.empty? file))
+      (let [result (fenpoon.add (cache.read) file)]
+        (cache.write result)))))
 
-(fn select [id]
-  "Use id to switch to buffer"
-  (if (fenpoon.contains (fenpoon.get-ids MARKS) id)
-      (let [file (core.get (fenpoon.find-mark-by-id MARKS id) :file)
-            bufid (vim.api.bufadd file)]
+(fn unmark [file]
+  (let [new-state (fenpoon.remove (cache.read) file)]
+    (cache.write new-state)))
+
+(fn select [file]
+  "Use file to switch to buffer"
+  (if (fenpoon.contains (cache.read) file)
+      (let [bufid (vim.api.bufadd file)]
         (vim.api.set_current_buf bufid))
-      (print (core.str "No " id " mark"))))
+      (print (nfnl.str "No " file " mark"))))
 
 ;; Telescope
 
@@ -48,24 +46,29 @@
 (fn telescope-delete-mark [prompt-bufnr]
   "Delete mark prompt"
   (let [confirmation (vim.fn.input "Delete? [y/n]: ")
-        {: index} (actions-state.get_selected_entry)]
+        file (actions-state.get_selected_entry)]
     (if (= (string.len confirmation) 0)
         (print "Didn't delete mark")
-        (do
-          (fenpoon.remove MARKS index)
-          (cache.write MARKS)
-          (let [current-picker (actions-state.get_current_picker prompt-bufnr)]
-            (current-picker:refresh (make-finder MARKS) {:reset_prompt true}))))))
+        (let [_ (print (nfnl.str file))
+              marks (unmark file)
+              current-picker (actions-state.get_current_picker prompt-bufnr)]
+          (current-picker:refresh (make-finder marks) {:reset_prompt true})))))
 
 (fn list [opts]
   "Open telescope to list marks"
   (: (pickers.new (themes.get_dropdown)
                   {:prompt_title :Fenpoon
-                   :finder (make-finder MARKS)
+                   :finder (make-finder (cache.read))
                    :sorter (conf.values.generic_sorter opts)
                    :attach_mappings (fn [_ map]
                                       (map :i :<c-d> telescope-delete-mark)
                                       (map :n :<c-d> telescope-delete-mark)
                                       true)}) :find))
 
-mod
+{: file-path
+ : debug
+ : mark
+ : unmark
+ : make-finder
+ : telescope-delete-mark
+ : list}
