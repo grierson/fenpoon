@@ -2,7 +2,9 @@
 
 Clone of [ThePrimeagen/harpoon](https://github.com/ThePrimeagen/harpoon) written in fennel
 
-I know the name is awful. FENnel + harPOON.
+(I know the name is awful. FENnel + harPOON.)
+
+![Example of Fenpoon](resources/example.png)
 
 ## Why
 
@@ -18,6 +20,8 @@ Lazy
 
 ```plaintext
 "grierson/fenpoon"
+...
+telescope.load_extension('fenpoon')
 ```
 
 ## Commands
@@ -36,8 +40,6 @@ List marks and view mark index
 
 ```vim
 :Telescope fenpoon
-OR
-:lua require("fenpoon.api").list()
 ```
 
 ### Select a mark
@@ -48,7 +50,7 @@ Select a specific mark
 :lua require("fenpoon.api").select(N)
 ```
 
-Usally map 1,2,3,4 to frequent keys
+Usally map 1,2,3,4 to frequent keys e.g
 
 ```vim
 n <cmd>:lua require("fenpoon.api").select(1)<CR>
@@ -59,8 +61,8 @@ o <cmd>:lua require("fenpoon.api").select(4)<CR>
 
 ### Delete mark
 
-`<c-d>` on selection within Telescope will delete the mark
+Pressing `<c-d>` within Telescope will ask you to confirm deleting mark
 
 ## TODO
 
-* Make marks project specific
+- Change id of mark (Move up, down)

@@ -10,7 +10,10 @@
 
 (fn entry-maker [{: id : file}]
   "Telescope list item options"
-  {:value id :ordinal file :display (nfnl.str id " - " file) :filename file})
+  {:value id
+   :ordinal (nfnl.str id)
+   :display (nfnl.str id " - " file)
+   :filename file})
 
 (fn make-finder [marks]
   (finders.new_table {:results marks :entry_maker entry-maker}))

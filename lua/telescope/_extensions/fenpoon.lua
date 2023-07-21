@@ -12,7 +12,7 @@ local function entry_maker(_1_)
   local _arg_2_ = _1_
   local id = _arg_2_["id"]
   local file = _arg_2_["file"]
-  return {value = id, ordinal = file, display = nfnl.str(id, " - ", file), filename = file}
+  return {value = id, ordinal = nfnl.str(id), display = nfnl.str(id, " - ", file), filename = file}
 end
 local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = entry_maker})
