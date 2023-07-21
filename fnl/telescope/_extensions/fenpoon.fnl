@@ -10,20 +10,20 @@
 
 (fn entry-maker [{: id : file}]
   "Telescope list item options"
-  {:value file :ordinal file :display (nfnl.str id " - " file) :filename file})
+  {:value id :ordinal file :display (nfnl.str id " - " file) :filename file})
 
 (fn make-finder [marks]
   (finders.new_table {:results marks :entry_maker entry-maker}))
 
 (fn telescope-delete-mark [prompt-bufnr]
   "Delete mark prompt"
-  (let [confirmation (vim.fn.input "Delete? [y/n]: ")
-        file (actions-state.get_selected_entry)]
-    (if (= (string.len confirmation) 0)
-        (print "Didn't delete mark")
-        (let [marks (api.unmark file)
+  (let [confirmation (vim.fn.input "Delete? [y/n]: ")]
+    (if (= confirmation :y)
+        (let [{: value} (actions-state.get_selected_entry)
+              marks (api.unmark value)
               current-picker (actions-state.get_current_picker prompt-bufnr)]
-          (current-picker:refresh (make-finder marks) {:reset_prompt true})))))
+          (current-picker:refresh (make-finder marks) {:reset_prompt true}))
+        (print "Didn't delete mark"))))
 
 (fn list [opts]
   "Open telescope to list marks"
@@ -35,8 +35,5 @@
                                       (map :i :<c-d> telescope-delete-mark)
                                       (map :n :<c-d> telescope-delete-mark)
                                       true)}) :find))
-
-; (make-finder (cache.read))
-; (list {})
 
 (telescope.register_extension {:exports {:fenpoon list}})

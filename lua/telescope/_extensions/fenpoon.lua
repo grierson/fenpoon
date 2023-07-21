@@ -12,28 +12,29 @@ local function entry_maker(_1_)
   local _arg_2_ = _1_
   local id = _arg_2_["id"]
   local file = _arg_2_["file"]
-  return {value = file, ordinal = file, display = nfnl.str(id, " - ", file), filename = file}
+  return {value = id, ordinal = file, display = nfnl.str(id, " - ", file), filename = file}
 end
 local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = entry_maker})
 end
 local function telescope_delete_mark(prompt_bufnr)
   local confirmation = vim.fn.input("Delete? [y/n]: ")
-  local file = actions_state.get_selected_entry()
-  if (string.len(confirmation) == 0) then
-    return print("Didn't delete mark")
-  else
-    local marks = api.unmark(file)
+  if (confirmation == "y") then
+    local _let_3_ = actions_state.get_selected_entry()
+    local value = _let_3_["value"]
+    local marks = api.unmark(value)
     local current_picker = actions_state.get_current_picker(prompt_bufnr)
     return current_picker:refresh(make_finder(marks), {reset_prompt = true})
+  else
+    return print("Didn't delete mark")
   end
 end
 local function list(opts)
-  local function _4_(_, map)
+  local function _5_(_, map)
     map("i", "<c-d>", telescope_delete_mark)
     map("n", "<c-d>", telescope_delete_mark)
     return true
   end
-  return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(cache["read-marks"]()), sorter = conf.values.generic_sorter(opts), attach_mappings = _4_}):find()
+  return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(cache["read-marks"]()), sorter = conf.values.generic_sorter(opts), attach_mappings = _5_}):find()
 end
 return telescope.register_extension({exports = {fenpoon = list}})
