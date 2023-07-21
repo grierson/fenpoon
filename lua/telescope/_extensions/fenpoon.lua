@@ -1,4 +1,5 @@
 -- [nfnl] Compiled from fnl/telescope/_extensions/fenpoon.fnl by https://github.com/Olical/nfnl, do not edit.
+local nfnl = require("nfnl.core")
 local api = require("fenpoon.api")
 local cache = require("fenpoon.cache")
 local telescope = require("telescope")
@@ -11,7 +12,7 @@ local function entry_maker(_1_)
   local _arg_2_ = _1_
   local id = _arg_2_["id"]
   local file = _arg_2_["file"]
-  return {value = file, ordinal = file, display = file, filename = file}
+  return {value = file, ordinal = file, display = nfnl.str(id, " - ", file), filename = file}
 end
 local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = entry_maker})

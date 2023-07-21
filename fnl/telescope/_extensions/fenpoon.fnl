@@ -1,3 +1,4 @@
+(local nfnl (require :nfnl.core))
 (local api (require :fenpoon.api))
 (local cache (require :fenpoon.cache))
 (local telescope (require :telescope))
@@ -9,7 +10,7 @@
 
 (fn entry-maker [{: id : file}]
   "Telescope list item options"
-  {:value file :ordinal file :display file :filename file})
+  {:value file :ordinal file :display (nfnl.str id " - " file) :filename file})
 
 (fn make-finder [marks]
   (finders.new_table {:results marks :entry_maker entry-maker}))
