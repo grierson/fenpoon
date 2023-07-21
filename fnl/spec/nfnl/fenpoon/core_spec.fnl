@@ -67,3 +67,13 @@
                           expected {proj [keep-file]}
                           actual (core.remove state id proj)]
                       (assert.are.same expected actual)))))))
+
+(describe "get-mark-by-id test"
+          (fn []
+            (it "find mark by id"
+                (fn []
+                  (let [id 1
+                        mark {: id :file :foo.fnl}
+                        marks [mark {:id 2 :file :bar.fnl}]
+                        actual (core.get-mark-by-id marks id)]
+                    (assert.are.same mark actual))))))

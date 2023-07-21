@@ -1,14 +1,7 @@
 (local nfnl (require :nfnl.core))
 (local core (require :fenpoon.core))
-(local cache (require :fenpoon.cache))
 (local utils (require :fenpoon.utils))
-
-(fn debug []
-  "Debugging - print marked files"
-  (let [state (cache.read-state)]
-    (if (nfnl.empty? state)
-        (print "No marks")
-        (print (nfnl.str state)))))
+(local cache (require :fenpoon.cache))
 
 (fn mark []
   "Add file to marks"
@@ -21,11 +14,14 @@
   (let [state (core.remove (cache.read-state) file)]
     (cache.write state)))
 
-(fn select [file]
-  "Use file to switch to buffer"
-  (if (core.contains (cache.read-marks) file)
-      (let [bufid (vim.api.bufadd file)]
-        (vim.api.set_current_buf bufid))
-      (print (nfnl.str "No " file " mark"))))
+(fn select [id]
+  "Use id to switch to buffer"
+  (let [marks (cache.read-marks)
+        {: file} (core.get-mark-by-id marks id)]
+    (if (nfnl.nil? file)
+        (print (nfnl.str "No mark"))
+        (let [filepath (.. (utils.project-path) "/" file)
+              bufid (vim.fn.bufadd filepath)]
+          (vim.api.nvim_set_current_buf bufid)))))
 
-{: debug : mark : unmark : select}
+{: mark : unmark : select}

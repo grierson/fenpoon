@@ -17,6 +17,20 @@ local function get_ids(marks)
   end
   return nfnl.map(_6_, marks)
 end
+local function get_mark_by_id(marks, target)
+  local mark
+  local function _9_(_7_)
+    local _arg_8_ = _7_
+    local id = _arg_8_["id"]
+    return (id == target)
+  end
+  mark = nfnl.filter(_9_, marks)
+  if not nfnl["empty?"](mark) then
+    return nfnl.first(mark)
+  else
+    return nil
+  end
+end
 local function next_id(current_ids, _3ftarget)
   local target = (_3ftarget or 1)
   if utils.contains(current_ids, target) then
@@ -30,12 +44,12 @@ local function add(state, file_path, _3fproj_path)
   local file = utils["normalize-path"](file_path, proj)
   local marks
   do
-    local t_8_ = state
-    if (nil ~= t_8_) then
-      t_8_ = (t_8_)[proj]
+    local t_12_ = state
+    if (nil ~= t_12_) then
+      t_12_ = (t_12_)[proj]
     else
     end
-    marks = t_8_
+    marks = t_12_
   end
   if (marks == nil) then
     state[proj] = {{id = 1, file = file}}
@@ -53,18 +67,18 @@ local function add(state, file_path, _3fproj_path)
   end
 end
 local function remove_mark(target_id, marks)
-  local function _14_(_12_)
-    local _arg_13_ = _12_
-    local id = _arg_13_["id"]
+  local function _18_(_16_)
+    local _arg_17_ = _16_
+    local id = _arg_17_["id"]
     return (id ~= target_id)
   end
-  return nfnl.filter(_14_, marks)
+  return nfnl.filter(_18_, marks)
 end
 local function remove(state, target_id, _3fproj_path)
   local proj = (_3fproj_path or utils["project-path"]())
-  local function _15_(...)
+  local function _19_(...)
     return remove_mark(target_id, ...)
   end
-  return nfnl.update(state, proj, _15_)
+  return nfnl.update(state, proj, _19_)
 end
-return {add = add, remove = remove}
+return {add = add, remove = remove, ["get-mark-by-id"] = get_mark_by_id}

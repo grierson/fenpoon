@@ -73,4 +73,15 @@ local function _8_()
   end
   return it("remove second file in project", _10_)
 end
-return describe("remove-mark test", _8_)
+describe("remove-mark test", _8_)
+local function _11_()
+  local function _12_()
+    local id = 1
+    local mark = {id = id, file = "foo.fnl"}
+    local marks = {mark, {id = 2, file = "bar.fnl"}}
+    local actual = core["get-mark-by-id"](marks, id)
+    return assert.are.same(mark, actual)
+  end
+  return it("find mark by id", _12_)
+end
+return describe("get-mark-by-id test", _11_)

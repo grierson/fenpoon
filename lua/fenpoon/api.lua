@@ -1,16 +1,8 @@
 -- [nfnl] Compiled from fnl/fenpoon/api.fnl by https://github.com/Olical/nfnl, do not edit.
 local nfnl = require("nfnl.core")
 local core = require("fenpoon.core")
-local cache = require("fenpoon.cache")
 local utils = require("fenpoon.utils")
-local function debug()
-  local state = cache["read-state"]()
-  if nfnl["empty?"](state) then
-    return print("No marks")
-  else
-    return print(nfnl.str(state))
-  end
-end
+local cache = require("fenpoon.cache")
 local function mark()
   local file = utils["current-file-path"]()
   if not nfnl["empty?"](file) then
@@ -24,12 +16,16 @@ local function unmark(file)
   local state = core.remove(cache["read-state"](), file)
   return cache.write(state)
 end
-local function select(file)
-  if core.contains(cache["read-marks"](), file) then
-    local bufid = vim.api.bufadd(file)
-    return vim.api.set_current_buf(bufid)
+local function select(id)
+  local marks = cache["read-marks"]()
+  local _let_2_ = core["get-mark-by-id"](marks, id)
+  local file = _let_2_["file"]
+  if nfnl["nil?"](file) then
+    return print(nfnl.str("No mark"))
   else
-    return print(nfnl.str("No ", file, " mark"))
+    local filepath = (utils["project-path"]() .. "/" .. file)
+    local bufid = vim.fn.bufadd(filepath)
+    return vim.api.nvim_set_current_buf(bufid)
   end
 end
-return {debug = debug, mark = mark, unmark = unmark, select = select}
+return {mark = mark, unmark = unmark, select = select}

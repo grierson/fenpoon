@@ -16,6 +16,11 @@
 (fn get-ids [marks]
   (nfnl.map (fn [{: id}] id) marks))
 
+(fn get-mark-by-id [marks target]
+  (let [mark (nfnl.filter (fn [{: id}] (= id target)) marks)]
+    (when (not (nfnl.empty? mark))
+      (nfnl.first mark))))
+
 (fn next-id [current-ids ?target]
   "Get next available id"
   (let [target (or ?target 1)]
@@ -48,4 +53,4 @@
   (let [proj (or ?proj-path (utils.project-path))]
     (nfnl.update state proj (partial remove-mark target-id))))
 
-{: add : remove}
+{: add : remove : get-mark-by-id}
