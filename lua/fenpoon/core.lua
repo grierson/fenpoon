@@ -62,18 +62,9 @@ local function remove_mark(target_id, marks)
 end
 local function remove(state, target_id, _3fproj_path)
   local proj = (_3fproj_path or utils["project-path"]())
-  local marks
-  do
-    local t_15_ = state
-    if (nil ~= t_15_) then
-      t_15_ = (t_15_)[proj]
-    else
-    end
-    marks = t_15_
-  end
-  local function _17_(...)
+  local function _15_(...)
     return remove_mark(target_id, ...)
   end
-  return nfnl.update(state, proj, _17_)
+  return nfnl.update(state, proj, _15_)
 end
 return {add = add, remove = remove}

@@ -45,8 +45,7 @@
   (nfnl.filter (fn [{: id}] (not= id target-id)) marks))
 
 (fn remove [state target-id ?proj-path]
-  (let [proj (or ?proj-path (utils.project-path))
-        marks (?. state proj)]
+  (let [proj (or ?proj-path (utils.project-path))]
     (nfnl.update state proj (partial remove-mark target-id))))
 
 {: add : remove}

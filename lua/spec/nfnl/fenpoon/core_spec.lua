@@ -4,7 +4,6 @@ local describe = _local_1_["describe"]
 local it = _local_1_["it"]
 local assert = require("luassert.assert")
 local core = require("fenpoon.core")
-local nfnl = require("nfnl.core")
 local function _2_()
   local proj = "proj/foo/"
   local function _3_()
@@ -40,20 +39,31 @@ local function _2_()
     local new_state = core.add(state, file_path, proj)
     return assert.are.same(expected, new_state)
   end
-  return it("earliest id is used", _6_)
+  it("earliest id is used", _6_)
+  local function _7_()
+    local new_proj = "proj/bar/"
+    local file = "second.fnl"
+    local existing_mark = {id = 1, file = "foo.fnl"}
+    local file_path = (new_proj .. file)
+    local state = {[proj] = {existing_mark}}
+    local expected = {[proj] = {existing_mark}, [new_proj] = {{id = 1, file = file}}}
+    local new_state = core.add(state, file_path, new_proj)
+    return assert.are.same(expected, new_state)
+  end
+  return it("add second project mark", _7_)
 end
 describe("add test", _2_)
-local function _7_()
+local function _8_()
   local proj = "proj/foo/"
-  local function _8_()
+  local function _9_()
     local id = 1
     local state = {[proj] = {{id = id, file = "bar.fnl"}}}
     local expected = {[proj] = {}}
     local actual = core.remove(state, id, proj)
     return assert.are.same(expected, actual)
   end
-  it("remove only file but keep project", _8_)
-  local function _9_()
+  it("remove only file but keep project", _9_)
+  local function _10_()
     local id = 1
     local keep_file = {id = 2, file = "bar.fnl"}
     local state = {[proj] = {{id = id, file = "foo.fnl"}, keep_file}}
@@ -61,6 +71,6 @@ local function _7_()
     local actual = core.remove(state, id, proj)
     return assert.are.same(expected, actual)
   end
-  return it("remove second file in project", _9_)
+  return it("remove second file in project", _10_)
 end
-return describe("remove-mark test", _7_)
+return describe("remove-mark test", _8_)

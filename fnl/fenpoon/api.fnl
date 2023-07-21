@@ -5,27 +5,27 @@
 
 (fn debug []
   "Debugging - print marked files"
-  (let [marks (cache.read)]
-    (if (nfnl.empty? marks)
+  (let [state (cache.read-state)]
+    (if (nfnl.empty? state)
         (print "No marks")
-        (print (nfnl.str marks)))))
+        (print (nfnl.str state)))))
 
 (fn mark []
   "Add file to marks"
   (let [file (utils.current-file-path)]
     (when (not (nfnl.empty? file))
-      (let [result (core.add (cache.read) file)]
-        (cache.write result)))))
+      (let [state (core.add (cache.read-state) file)]
+        (cache.write state)))))
 
 (fn unmark [file]
-  (let [new-state (core.remove (cache.read) file)]
-    (cache.write new-state)))
+  (let [state (core.remove (cache.read-state) file)]
+    (cache.write state)))
 
 (fn select [file]
   "Use file to switch to buffer"
-  (if (core.contains (cache.read) file)
+  (if (core.contains (cache.read-marks) file)
       (let [bufid (vim.api.bufadd file)]
         (vim.api.set_current_buf bufid))
       (print (nfnl.str "No " file " mark"))))
 
-{: debug : mark : unmark}
+{: debug : mark : unmark : select}

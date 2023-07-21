@@ -1,16 +1,28 @@
 (local nfnl (require :nfnl.core))
+(local utils (require :fenpoon.utils))
 
 (local cache (.. (vim.fn.stdpath :data) :/fenpoon.json))
 
-(fn read []
-  (let [marks (nfnl.slurp cache)]
-    (if (nfnl.empty? marks)
+(fn read-state []
+  (let [json (nfnl.slurp cache)]
+    (if (nfnl.empty? json)
         {}
-        (vim.fn.json_decode marks))))
+        (let [state (vim.fn.json_decode json)]
+          (if (nfnl.empty? json)
+              {}
+              state)))))
 
-(fn write [marks]
+(fn read-marks [?proj-path]
+  (let [state (read-state)]
+    (let [project (or ?proj-path (utils.project-path))
+          marks (?. state project)]
+      (if (= nil marks)
+          []
+          marks))))
+
+(fn write [state]
   (do
-    (nfnl.spit cache (vim.fn.json_encode marks))
-    (read)))
+    (nfnl.spit cache (vim.fn.json_encode state))
+    (read-marks)))
 
-{: read : write}
+{: read-state : read-marks : write}

@@ -1,6 +1,5 @@
-(local nfnl (require :nfnl.core))
 (local api (require :fenpoon.api))
-(local utils (require :fenpoon.utils))
+(local cache (require :fenpoon.cache))
 (local telescope (require :telescope))
 (local themes (require :telescope.themes))
 (local actions-state (require :telescope.actions.state))
@@ -8,12 +7,9 @@
 (local finders (require :telescope.finders))
 (local conf (require :telescope.config))
 
-(fn entry-maker [file ?proj-path]
+(fn entry-maker [{: id : file}]
   "Telescope list item options"
-  {:value file
-   :ordinal file
-   :display (utils.normalize-path file ?proj-path)
-   :filename file})
+  {:value file :ordinal file :display file :filename file})
 
 (fn make-finder [marks]
   (finders.new_table {:results marks :entry_maker entry-maker}))
@@ -32,11 +28,14 @@
   "Open telescope to list marks"
   (: (pickers.new (themes.get_dropdown)
                   {:prompt_title :Fenpoon
-                   :finder (make-finder (cache.read))
+                   :finder (make-finder (cache.read-marks))
                    :sorter (conf.values.generic_sorter opts)
                    :attach_mappings (fn [_ map]
                                       (map :i :<c-d> telescope-delete-mark)
                                       (map :n :<c-d> telescope-delete-mark)
                                       true)}) :find))
+
+; (make-finder (cache.read))
+; (list {})
 
 (telescope.register_extension {:exports {:fenpoon list}})

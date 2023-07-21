@@ -1,15 +1,17 @@
 -- [nfnl] Compiled from fnl/telescope/_extensions/fenpoon.fnl by https://github.com/Olical/nfnl, do not edit.
-local nfnl = require("nfnl.core")
 local api = require("fenpoon.api")
-local utils = require("fenpoon.utils")
+local cache = require("fenpoon.cache")
 local telescope = require("telescope")
 local themes = require("telescope.themes")
 local actions_state = require("telescope.actions.state")
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config")
-local function entry_maker(file, _3fproj_path)
-  return {value = file, ordinal = file, display = utils["normalize-path"](file, _3fproj_path), filename = file}
+local function entry_maker(_1_)
+  local _arg_2_ = _1_
+  local id = _arg_2_["id"]
+  local file = _arg_2_["file"]
+  return {value = file, ordinal = file, display = file, filename = file}
 end
 local function make_finder(marks)
   return finders.new_table({results = marks, entry_maker = entry_maker})
@@ -26,11 +28,11 @@ local function telescope_delete_mark(prompt_bufnr)
   end
 end
 local function list(opts)
-  local function _2_(_, map)
+  local function _4_(_, map)
     map("i", "<c-d>", telescope_delete_mark)
     map("n", "<c-d>", telescope_delete_mark)
     return true
   end
-  return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(cache.read()), sorter = conf.values.generic_sorter(opts), attach_mappings = _2_}):find()
+  return pickers.new(themes.get_dropdown(), {prompt_title = "Fenpoon", finder = make_finder(cache["read-marks"]()), sorter = conf.values.generic_sorter(opts), attach_mappings = _4_}):find()
 end
 return telescope.register_extension({exports = {fenpoon = list}})

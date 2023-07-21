@@ -1,7 +1,6 @@
 (local {: describe : it} (require :plenary.busted))
 (local assert (require :luassert.assert))
 (local core (require :fenpoon.core))
-(local nfnl (require :nfnl.core))
 
 (describe "add test"
           (fn []
@@ -37,6 +36,17 @@
                           expected {proj [{:id 2 :file :baz.fnl}
                                           {:id 1 :file :bar.fnl}]}
                           new-state (core.add state file-path proj)]
+                      (assert.are.same expected new-state))))
+              (it "add second project mark"
+                  (fn []
+                    (let [new-proj :proj/bar/
+                          file :second.fnl
+                          existing-mark {:id 1 :file :foo.fnl}
+                          file-path (.. new-proj file)
+                          state {proj [existing-mark]}
+                          expected {proj [existing-mark]
+                                    new-proj [{:id 1 : file}]}
+                          new-state (core.add state file-path new-proj)]
                       (assert.are.same expected new-state)))))))
 
 (describe "remove-mark test"
