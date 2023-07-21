@@ -5,7 +5,7 @@
 (fn read []
   (let [marks (nfnl.slurp cache)]
     (if (nfnl.empty? marks)
-        []
+        {}
         (vim.fn.json_decode marks))))
 
 (fn write [marks]
@@ -13,4 +13,4 @@
     (nfnl.spit cache (vim.fn.json_encode marks))
     (read)))
 
-{: read : write : cache}
+{: read : write}

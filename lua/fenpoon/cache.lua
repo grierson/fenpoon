@@ -13,4 +13,4 @@ local function write(marks)
   nfnl.spit(cache, vim.fn.json_encode(marks))
   return read()
 end
-return {read = read, write = write, cache = cache}
+return {read = read, write = write}

@@ -1,73 +1,79 @@
 -- [nfnl] Compiled from fnl/fenpoon/core.fnl by https://github.com/Olical/nfnl, do not edit.
 local nfnl = require("nfnl.core")
-local str = require("nfnl.string")
-local function contains(coll, target)
-  local function _1_(v)
-    if (v == target) then
-      return v
-    else
-      return nil
-    end
-  end
-  return nfnl.some(_1_, coll)
-end
+local utils = require("fenpoon.utils")
 local function get_files(marks)
-  local function _5_(_3_)
-    local _arg_4_ = _3_
-    local file = _arg_4_["file"]
+  local function _3_(_1_)
+    local _arg_2_ = _1_
+    local file = _arg_2_["file"]
     return file
   end
-  return nfnl.map(_5_, marks)
+  return nfnl.map(_3_, marks)
 end
-local function relative_path(proj, file)
-  return nfnl.second(str.split(proj, file))
+local function get_ids(marks)
+  local function _6_(_4_)
+    local _arg_5_ = _4_
+    local id = _arg_5_["id"]
+    return id
+  end
+  return nfnl.map(_6_, marks)
 end
-relative_path("proj/foo", "proj/foo/bar.fnl")
-if (nil == nil) then
-else
-end
-local function project_path()
-  return vim.loop.cwd()
+local function next_id(current_ids, _3ftarget)
+  local target = (_3ftarget or 1)
+  if utils.contains(current_ids, target) then
+    return next_id(current_ids, nfnl.inc(target))
+  else
+    return target
+  end
 end
 local function add(state, file_path, _3fproj_path)
-  local proj = (_3fproj_path or project_path())
-  local file = relative_path(proj, file_path)
+  local proj = (_3fproj_path or utils["project-path"]())
+  local file = utils["normalize-path"](file_path, proj)
   local marks
   do
-    local t_7_ = state
-    if (nil ~= t_7_) then
-      t_7_ = (t_7_)[proj]
+    local t_8_ = state
+    if (nil ~= t_8_) then
+      t_8_ = (t_8_)[proj]
     else
     end
-    marks = t_7_
+    marks = t_8_
   end
   if (marks == nil) then
     state[proj] = {{id = 1, file = file}}
     return state
   else
     local files = get_files(marks)
-    if contains(files, file) then
+    if utils.contains(files, file) then
       return state
     else
-      table.insert(marks, {id = 1, file = file})
+      local ids = get_ids(marks)
+      local id = next_id(ids)
+      table.insert(marks, {id = id, file = file})
       return state
     end
   end
 end
-local function remove(marks, target)
-  local function _11_(v)
-    if (v ~= target) then
-      return v
-    else
-      return nil
-    end
+local function remove_mark(target_id, marks)
+  local function _14_(_12_)
+    local _arg_13_ = _12_
+    local id = _arg_13_["id"]
+    return (id ~= target_id)
   end
-  return nfnl.filter(_11_, marks)
+  return nfnl.filter(_14_, marks)
 end
-local function relative_path0(proj, file)
-  return nfnl.second(str.split(file, proj))
+local function remove(state, target_id, _3fproj_path)
+  local proj = (_3fproj_path or utils["project-path"]())
+  local marks
+  do
+    local t_15_ = state
+    if (nil ~= t_15_) then
+      t_15_ = (t_15_)[proj]
+    else
+    end
+    marks = t_15_
+  end
+  local function _17_(...)
+    return remove_mark(target_id, ...)
+  end
+  return nfnl.update(state, proj, _17_)
 end
-local function entry_maker(file)
-  return {value = file, ordinal = file, display = relative_path0(project_path(), file), filename = file}
-end
-return {contains = contains, add = add, remove = remove}
+return {add = add, remove = remove}
